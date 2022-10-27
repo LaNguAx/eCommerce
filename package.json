@@ -1,0 +1,18 @@
+{
+  "name": "fakeIT eCommerce Store",
+  "version": "0.0.1",
+  "description": "A fake eCommerce store for skill testing.",
+  "author": "Itay Aknin",
+  "license": "ISC",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html --dist-dir ./dist"
+  },
+  "devDependencies": {
+    "parcel": "^2.7.0"
+  },
+  "dependencies": {
+    "core-js": "^3.26.0",
+    "regenerator-runtime": "^0.13.10"
+  }
+}

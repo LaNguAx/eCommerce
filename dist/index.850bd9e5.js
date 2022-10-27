@@ -142,14 +142,14 @@
       this[globalName] = mainExports;
     }
   }
-})({"c4xoB":[function(require,module,exports) {
+})({"bxIRe":[function(require,module,exports) {
 "use strict";
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d6ea1d42532a7575";
-module.bundle.HMR_BUNDLE_ID = "0907ca6d3464ddca";
+module.bundle.HMR_BUNDLE_ID = "af599da5850bd9e5";
 /* global HMR_HOST, HMR_PORT, HMR_ENV_HASH, HMR_SECURE, chrome, browser, globalThis, __parcel__import__, __parcel__importScripts__, ServiceWorkerGlobalScope */ /*::
 import type {
   HMRAsset,
@@ -531,8 +531,131 @@ function hmrAcceptRun(bundle, id) {
     acceptedAssets[id] = true;
 }
 
-},{}],"j4kuM":[function(require,module,exports) {
+},{}],"1GgH0":[function(require,module,exports) {
+var _configJs = require("./config.js");
+var _modelJs = require("./model.js");
+const controlProductList = async function() {
+    await _modelJs.getCategoryProductList((0, _configJs.BrandsCategoryID).lacoste, 120);
+    console.log(_modelJs.state.search.results);
+    await _modelJs.getCategoryProductList((0, _configJs.BrandsCategoryID).adidas, 500);
+    console.log(_modelJs.state.search.results);
+//NOTE -- LOAD THE NEXT RESULTS IN THE BACKGROUND WHEN IN PAGE 2, MEANING PAGE 3 WILL LOAD IN THE BACKGROUND WHEN PRESSING PAGE 2 WHEN UR ON PAGE 1. SO IT WONT BE FELT.
+};
+controlProductList(); // controlProductList();
+ // model.getCategoryProductList(BrandsCategoryID.adidas, 120);
 
-},{}]},["c4xoB","j4kuM"], "j4kuM", "parcelRequire201a")
+},{"./model.js":"Py0LO","./config.js":"4Wc5b"}],"Py0LO":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "state", ()=>state);
+parcelHelpers.export(exports, "getCategoryProductList", ()=>getCategoryProductList);
+var _configJs = require("./config.js");
+var _helpersJs = require("./helpers.js");
+const state = {
+    search: {
+        results: [],
+        page: 1,
+        resultsPerPage: (0, _configJs.RES_PER_PAGE)
+    }
+};
+const getCategoryProductList = async function(brand, offset) {
+    state.search.results = (({ products , ...o })=>products)(await (0, _helpersJs.AJAX)((0, _configJs.API_URL_PRODUCTS_LIST)(brand, offset), (0, _configJs.API_OPTIONS)));
+};
 
-//# sourceMappingURL=eCommerce.3464ddca.js.map
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"4Wc5b","./helpers.js":"6s1be"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"4Wc5b":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
+parcelHelpers.export(exports, "BrandsCategoryID", ()=>BrandsCategoryID);
+parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE);
+parcelHelpers.export(exports, "API_URL_CATEGORIES_LIST", ()=>API_URL_CATEGORIES_LIST);
+parcelHelpers.export(exports, "API_URL_PRODUCTS_LIST", ()=>API_URL_PRODUCTS_LIST);
+parcelHelpers.export(exports, "API_URL_PRODUCT_DETAILS", ()=>API_URL_PRODUCT_DETAILS);
+parcelHelpers.export(exports, "API_OPTIONS", ()=>API_OPTIONS);
+const TIMEOUT_SEC = 10;
+const BrandsCategoryID = {
+    adidas: 7113,
+    nike: 4766,
+    emporioArmani: 7071,
+    newBalance: 3792,
+    lacoste: 7368
+};
+const RES_PER_PAGE = 20;
+const API_URL_CATEGORIES_LIST = `https://asos2.p.rapidapi.com/categories/list?country=US&lang=en-US`;
+const API_URL_PRODUCTS_LIST = (categoryID, offset = 0)=>`https://asos2.p.rapidapi.com/products/v2/list?store=US&offset=${offset}&categoryId=${categoryID}&limit=48&country=US&sort=freshness&currency=USD&sizeSchema=US&lang=en-US`;
+const API_URL_PRODUCT_DETAILS = (id)=>`  https://asos2.p.rapidapi.com/products/v3/detail?id=${id}&lang=en-US&store=US&sizeSchema=US&currency=USD`;
+const API_OPTIONS = {
+    method: "GET",
+    headers: {
+        "X-RapidAPI-Key": "9cd03bd82dmshe9ba157b398e05dp13dea5jsnb28a46f65137",
+        "X-RapidAPI-Host": "asos2.p.rapidapi.com"
+    }
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6s1be":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AJAX", ()=>AJAX);
+var _configJs = require("./config.js");
+const timeout = function(time) {
+    return new Promise(function(_, reject) {
+        setTimeout(()=>{
+            reject(new Error("The request timed out! The request took too long!"));
+        }, time * 1000);
+    });
+};
+const AJAX = async function(url, options, uploadData) {
+    try {
+        const fetchPro = uploadData ? fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(uploadData)
+        }) : fetch(url, options);
+        const res = await Promise.race([
+            fetchPro,
+            timeout((0, _configJs.TIMEOUT_SEC))
+        ]);
+        const data = await res.json();
+        if (!res.ok) throw new Error(`${data.message} (${res.status})`);
+        return data;
+    } catch (error) {
+        // rethrowing the error in order to handle it in the original loadRecipe async function which is calling the getJSON.
+        throw error;
+    }
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"4Wc5b"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire201a")
+
+//# sourceMappingURL=index.850bd9e5.js.map

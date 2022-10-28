@@ -5,6 +5,7 @@ export const BrandsCategoryID = {
   emporioArmani: 7071,
   newBalance: 3792,
   lacoste: 7368,
+  boss: 27633,
 };
 
 export const RES_PER_PAGE = 20;

@@ -535,52 +535,57 @@ function hmrAcceptRun(bundle, id) {
 var _configJs = require("./config.js");
 var _modelJs = require("./model.js");
 const controlProductList = async function() {
-    await _modelJs.getCategoryProductList((0, _configJs.BrandsCategoryID).lacoste);
-    await _modelJs.getCategoryProductList((0, _configJs.BrandsCategoryID).adidas, 500);
-    //NOTE -- LOAD THE NEXT RESULTS IN THE BACKGROUND WHEN IN PAGE 2, MEANING PAGE 3 WILL LOAD IN THE BACKGROUND WHEN PRESSING PAGE 2 WHEN UR ON PAGE 1. SO IT WONT BE FELT.
-    console.log(_modelJs.state.search.results);
+// await model.getCategoryProductList(BrandsCategoryID.lacoste);
+// await model.getCategoryProductList(BrandsCategoryID.adidas, 500);
+//NOTE -- LOAD THE NEXT RESULTS IN THE BACKGROUND WHEN IN PAGE 2, MEANING PAGE 3 WILL LOAD IN THE BACKGROUND WHEN PRESSING PAGE 2 WHEN UR ON PAGE 1. SO IT WONT BE FELT.
+// await model.getCategoryProductList(BrandsCategoryID.boss);
+// console.log(model.state.search.results);
+// console.log('FINISHED LOADING');
 };
-controlProductList(); // controlProductList();
- // model.getCategoryProductList(BrandsCategoryID.adidas, 120);
-
-},{"./model.js":"Py0LO","./config.js":"4Wc5b"}],"Py0LO":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "state", ()=>state);
-parcelHelpers.export(exports, "getCategoryProductList", ()=>getCategoryProductList);
-var _configJs = require("./config.js");
-var _helpersJs = require("./helpers.js");
-const state = {
-    search: {
-        results: [],
-        page: 1,
-        resultsPerPage: (0, _configJs.RES_PER_PAGE)
+controlProductList();
+// controlProductList();
+// model.getCategoryProductList(BrandsCategoryID.adidas, 120);
+const options = {
+    method: "GET",
+    headers: {
+        "X-RapidAPI-Key": "9cd03bd82dmshe9b a157b398e05dp13dea5jsnb28a46f65137",
+        "X-RapidAPI-Host": "asos2.p.rapidapi.com"
     }
 };
-const getCategoryProductList = async function(brand, offset) {
-    const products = (({ products , ...o })=>products)(await (0, _helpersJs.AJAX)((0, _configJs.API_URL_PRODUCTS_LIST)(brand, offset), (0, _configJs.API_OPTIONS)));
-    console.log(products);
-    state.search.results = products.map((prod)=>{
-        const fixedObj = (({ brandName , colour , id , imageUrl , name , price , ...o })=>({
-                brandName,
-                colour,
-                id,
-                imageUrl,
-                name,
-                price
-            }))(prod);
-        return fixedObj;
-    });
-}; // Get full product details
- // fetch(
- //   'https://asos2.p.rapidapi.com/products/v3/detail?id=202613412&lang=en-US&store=US&sizeSchema=US&currency=USD',
- //   API_OPTIONS
- // )
- //   .then(response => response.json())
- //   .then(response => console.log(response))
- //   .catch(err => console.error(err));
+fetch("https://asos2.p.rapidapi.com/categories/list?country=US&lang=en-US", options).then((response)=>response.json()).then((response)=>console.log(response)).catch((err)=>console.error(err));
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"4Wc5b","./helpers.js":"6s1be"}],"gkKU3":[function(require,module,exports) {
+},{"./config.js":"4Wc5b","./model.js":"Py0LO"}],"4Wc5b":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
+parcelHelpers.export(exports, "BrandsCategoryID", ()=>BrandsCategoryID);
+parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE);
+parcelHelpers.export(exports, "API_URL_CATEGORIES_LIST", ()=>API_URL_CATEGORIES_LIST);
+parcelHelpers.export(exports, "API_URL_PRODUCTS_LIST", ()=>API_URL_PRODUCTS_LIST);
+parcelHelpers.export(exports, "API_URL_PRODUCT_DETAILS", ()=>API_URL_PRODUCT_DETAILS);
+parcelHelpers.export(exports, "API_OPTIONS", ()=>API_OPTIONS);
+const TIMEOUT_SEC = 10;
+const BrandsCategoryID = {
+    adidas: 7113,
+    nike: 4766,
+    emporioArmani: 7071,
+    newBalance: 3792,
+    lacoste: 7368,
+    boss: 27633
+};
+const RES_PER_PAGE = 20;
+const API_URL_CATEGORIES_LIST = `https://asos2.p.rapidapi.com/categories/list?country=US&lang=en-US`;
+const API_URL_PRODUCTS_LIST = (categoryID, offset = 0)=>`https://asos2.p.rapidapi.com/products/v2/list?store=US&offset=${offset}&categoryId=${categoryID}&limit=48&country=US&sort=freshness&currency=USD&sizeSchema=US&lang=en-US`;
+const API_URL_PRODUCT_DETAILS = (id)=>`  https://asos2.p.rapidapi.com/products/v3/detail?id=${id}&lang=en-US&store=US&sizeSchema=US&currency=USD`;
+const API_OPTIONS = {
+    method: "GET",
+    headers: {
+        "X-RapidAPI-Key": "9cd03bd82dmshe9ba157b398e05dp13dea5jsnb28a46f65137",
+        "X-RapidAPI-Host": "asos2.p.rapidapi.com"
+    }
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -610,37 +615,43 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"4Wc5b":[function(require,module,exports) {
+},{}],"Py0LO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
-parcelHelpers.export(exports, "BrandsCategoryID", ()=>BrandsCategoryID);
-parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE);
-parcelHelpers.export(exports, "API_URL_CATEGORIES_LIST", ()=>API_URL_CATEGORIES_LIST);
-parcelHelpers.export(exports, "API_URL_PRODUCTS_LIST", ()=>API_URL_PRODUCTS_LIST);
-parcelHelpers.export(exports, "API_URL_PRODUCT_DETAILS", ()=>API_URL_PRODUCT_DETAILS);
-parcelHelpers.export(exports, "API_OPTIONS", ()=>API_OPTIONS);
-const TIMEOUT_SEC = 10;
-const BrandsCategoryID = {
-    adidas: 7113,
-    nike: 4766,
-    emporioArmani: 7071,
-    newBalance: 3792,
-    lacoste: 7368
-};
-const RES_PER_PAGE = 20;
-const API_URL_CATEGORIES_LIST = `https://asos2.p.rapidapi.com/categories/list?country=US&lang=en-US`;
-const API_URL_PRODUCTS_LIST = (categoryID, offset = 0)=>`https://asos2.p.rapidapi.com/products/v2/list?store=US&offset=${offset}&categoryId=${categoryID}&limit=48&country=US&sort=freshness&currency=USD&sizeSchema=US&lang=en-US`;
-const API_URL_PRODUCT_DETAILS = (id)=>`  https://asos2.p.rapidapi.com/products/v3/detail?id=${id}&lang=en-US&store=US&sizeSchema=US&currency=USD`;
-const API_OPTIONS = {
-    method: "GET",
-    headers: {
-        "X-RapidAPI-Key": "9cd03bd82dmshe9ba157b398e05dp13dea5jsnb28a46f65137",
-        "X-RapidAPI-Host": "asos2.p.rapidapi.com"
+parcelHelpers.export(exports, "state", ()=>state);
+parcelHelpers.export(exports, "getCategoryProductList", ()=>getCategoryProductList);
+var _configJs = require("./config.js");
+var _helpersJs = require("./helpers.js");
+const state = {
+    search: {
+        results: [],
+        page: 1,
+        resultsPerPage: (0, _configJs.RES_PER_PAGE)
     }
 };
+const getCategoryProductList = async function(brand, offset) {
+    const products = (({ products , ...o })=>products)(await (0, _helpersJs.AJAX)((0, _configJs.API_URL_PRODUCTS_LIST)(brand, offset), (0, _configJs.API_OPTIONS)));
+    state.search.results = products.map((prod)=>{
+        const fixedObj = (({ brandName , colour , id , imageUrl , name , price , ...o })=>({
+                brandName,
+                colour,
+                id,
+                imageUrl,
+                name,
+                price
+            }))(prod);
+        return fixedObj;
+    });
+}; // Get full product details
+ // fetch(
+ //   'https://asos2.p.rapidapi.com/products/v3/detail?id=202841816&lang=en-US&store=US&sizeSchema=US&currency=USD',
+ //   API_OPTIONS
+ // )
+ //   .then(response => response.json())
+ //   .then(response => console.log(response))
+ //   .catch(err => console.error(err));
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6s1be":[function(require,module,exports) {
+},{"./config.js":"4Wc5b","./helpers.js":"6s1be","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6s1be":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AJAX", ()=>AJAX);
@@ -674,6 +685,6 @@ const AJAX = async function(url, options, uploadData) {
     }
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"4Wc5b"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire512a")
+},{"./config.js":"4Wc5b","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire512a")
 
 //# sourceMappingURL=index.850bd9e5.js.map

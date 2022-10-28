@@ -55,7 +55,7 @@ export const getCategoryProductList = async function (brand, offset) {
 
 // Get full product details
 // fetch(
-//   'https://asos2.p.rapidapi.com/products/v3/detail?id=202613412&lang=en-US&store=US&sizeSchema=US&currency=USD',
+//   'https://asos2.p.rapidapi.com/products/v3/detail?id=202841816&lang=en-US&store=US&sizeSchema=US&currency=USD',
 //   API_OPTIONS
 // )
 //   .then(response => response.json())

@@ -535,11 +535,10 @@ function hmrAcceptRun(bundle, id) {
 var _configJs = require("./config.js");
 var _modelJs = require("./model.js");
 const controlProductList = async function() {
-    await _modelJs.getCategoryProductList((0, _configJs.BrandsCategoryID).lacoste, 120);
-    console.log(_modelJs.state.search.results);
+    await _modelJs.getCategoryProductList((0, _configJs.BrandsCategoryID).lacoste);
     await _modelJs.getCategoryProductList((0, _configJs.BrandsCategoryID).adidas, 500);
+    //NOTE -- LOAD THE NEXT RESULTS IN THE BACKGROUND WHEN IN PAGE 2, MEANING PAGE 3 WILL LOAD IN THE BACKGROUND WHEN PRESSING PAGE 2 WHEN UR ON PAGE 1. SO IT WONT BE FELT.
     console.log(_modelJs.state.search.results);
-//NOTE -- LOAD THE NEXT RESULTS IN THE BACKGROUND WHEN IN PAGE 2, MEANING PAGE 3 WILL LOAD IN THE BACKGROUND WHEN PRESSING PAGE 2 WHEN UR ON PAGE 1. SO IT WONT BE FELT.
 };
 controlProductList(); // controlProductList();
  // model.getCategoryProductList(BrandsCategoryID.adidas, 120);
@@ -559,8 +558,27 @@ const state = {
     }
 };
 const getCategoryProductList = async function(brand, offset) {
-    state.search.results = (({ products , ...o })=>products)(await (0, _helpersJs.AJAX)((0, _configJs.API_URL_PRODUCTS_LIST)(brand, offset), (0, _configJs.API_OPTIONS)));
-};
+    const products = (({ products , ...o })=>products)(await (0, _helpersJs.AJAX)((0, _configJs.API_URL_PRODUCTS_LIST)(brand, offset), (0, _configJs.API_OPTIONS)));
+    console.log(products);
+    state.search.results = products.map((prod)=>{
+        const fixedObj = (({ brandName , colour , id , imageUrl , name , price , ...o })=>({
+                brandName,
+                colour,
+                id,
+                imageUrl,
+                name,
+                price
+            }))(prod);
+        return fixedObj;
+    });
+}; // Get full product details
+ // fetch(
+ //   'https://asos2.p.rapidapi.com/products/v3/detail?id=202613412&lang=en-US&store=US&sizeSchema=US&currency=USD',
+ //   API_OPTIONS
+ // )
+ //   .then(response => response.json())
+ //   .then(response => console.log(response))
+ //   .catch(err => console.error(err));
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"4Wc5b","./helpers.js":"6s1be"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
@@ -656,6 +674,6 @@ const AJAX = async function(url, options, uploadData) {
     }
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"4Wc5b"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire201a")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config.js":"4Wc5b"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire512a")
 
 //# sourceMappingURL=index.850bd9e5.js.map

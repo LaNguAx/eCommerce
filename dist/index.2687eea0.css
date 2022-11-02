@@ -24,11 +24,81 @@ body {
 
 .header {
   height: 25vh;
+  width: 90vw;
+  margin-inline: auto;
+  position: relative;
+}
+
+.main-navigation {
+  height: 10vh;
+  border-bottom: 2px solid var(--navigation-btn-color);
+  background-color: #fff;
+  align-items: center;
+  margin-bottom: 2rem;
+  display: flex;
+}
+
+.main-logo {
+  width: 5rem;
+  margin: 1rem 0 0 5rem;
+  transform: scale(2.5);
+}
+
+.navigation-list {
+  width: 90%;
+  justify-content: flex-end;
+  align-items: center;
+  list-style: none;
+  display: flex;
+}
+
+.navigation-item {
+  justify-content: center;
+  align-items: flex-end;
+  display: flex;
 }
 
 .navigation-icon {
-  width: 50px;
-  fill: var(--navigation-btn-color);
+  color: var(--navigation-btn-color);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  transform: scale(2);
+}
+
+.navigation-list:last-child > .navigation-item > .navigation-icon {
+  transform: scale(2);
+}
+
+.flex-container {
+  align-items: center;
+  gap: 3rem;
+  margin-right: 4rem;
+  display: flex;
+}
+
+.header-information {
+  text-align: center;
+  border-bottom: 2px solid var(--navigation-btn-color);
+  font-size: .8rem;
+}
+
+.secondary-heading {
+  color: var(--main-text-color);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.btn.shop-now-btn {
+  width: max-content;
+  background: var(--main-heading-bg-color);
+  color: #fff;
+  margin-inline: auto;
+  border-radius: 50rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  font-size: 2.4rem;
+  font-weight: 600;
 }
 
 /*# sourceMappingURL=index.2687eea0.css.map */

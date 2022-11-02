@@ -38,43 +38,54 @@ body {
   display: flex;
 }
 
+.main-logo-container {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
 .main-logo {
   width: 5rem;
-  margin: 1rem 0 0 5rem;
   transform: scale(2.5);
 }
 
 .navigation-list {
-  width: 90%;
-  justify-content: flex-end;
+  height: 100%;
+  flex: 1;
+  justify-content: center;
   align-items: center;
   list-style: none;
   display: flex;
 }
 
 .navigation-item {
+  height: 100%;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   display: flex;
+}
+
+.navigation-list > .navigation-item:last-child > .navigation-icon {
+  background: var(--main-text-color);
+  border-radius: .5rem;
+  font-size: 5rem !important;
 }
 
 .navigation-icon {
   color: var(--navigation-btn-color);
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  transform: scale(2);
-}
-
-.navigation-list:last-child > .navigation-item > .navigation-icon {
-  transform: scale(2);
+  font-size: 3.5rem !important;
 }
 
 .flex-container {
-  align-items: center;
-  gap: 3rem;
-  margin-right: 4rem;
+  height: 80%;
+  flex: 1;
+  gap: .5rem;
   display: flex;
+}
+
+.flex-container > .navigation-item:last-child {
+  margin-top: .2rem;
 }
 
 .header-information {

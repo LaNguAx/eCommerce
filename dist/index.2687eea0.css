@@ -4,12 +4,31 @@
   padding: 0;
 }
 
+:root {
+  --main-heading-bg-color: #4dabf7;
+  --secondary-heading-color: #4d4d4d;
+  --main-text-color: #ccc;
+  --purchase-btn-bg-color: #4dabf7;
+  --add-to-cart-btn-bg-color: #a5d8ff;
+  --navigation-btn-color: #4d4d4d;
+  --misc-bg-color: #e9ecef;
+}
+
 html {
   font-size: 62.5%;
 }
 
 body {
-  font-family: Open Sans, Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif;
+  font-family: Poppins, Open Sans, Lucida Sans, Lucida Sans Regular, Lucida Grande, Lucida Sans Unicode, Geneva, Verdana, sans-serif;
+}
+
+.header {
+  height: 25vh;
+}
+
+.navigation-icon {
+  width: 50px;
+  fill: var(--navigation-btn-color);
 }
 
 /*# sourceMappingURL=index.2687eea0.css.map */

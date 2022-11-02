@@ -537,7 +537,6 @@ const initate = async function() {
     _modelJs.loadCategories();
     _modelJs.loadProducts();
 }();
-console.log(_modelJs.AppData.products_info);
 
 },{"./model.js":"Py0LO"}],"Py0LO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

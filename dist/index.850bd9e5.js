@@ -533,21 +533,54 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"1GgH0":[function(require,module,exports) {
 var _modelJs = require("./model.js");
-fetch("https://fakestoreapi.com/products").then((res)=>res.json()).then((data)=>{
-    data.forEach((element)=>console.log(element.category));
-});
+const initate = async function() {
+    _modelJs.loadCategories();
+    _modelJs.loadProducts();
+}();
+console.log(_modelJs.AppData.products_info);
 
 },{"./model.js":"Py0LO"}],"Py0LO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "AppData", ()=>AppData);
 parcelHelpers.export(exports, "state", ()=>state);
+parcelHelpers.export(exports, "loadCategories", ()=>loadCategories);
+parcelHelpers.export(exports, "loadProducts", ()=>loadProducts);
 var _configJs = require("./config.js");
 var _helpersJs = require("./helpers.js");
+const AppData = {
+    categories: [],
+    products_info: {
+        products: [],
+        get product_count () {
+            return this.products.length;
+        }
+    }
+};
 const state = {
+    product: undefined,
     search: {
         results: [],
         page: 1,
         resultsPerPage: (0, _configJs.RES_PER_PAGE)
+    }
+};
+const loadCategories = async function() {
+    try {
+        const categories = [
+            ...new Set(await (0, _helpersJs.AJAX)(`${(0, _configJs.API_URL)}categories`))
+        ];
+        AppData.categories = categories;
+    } catch (error) {
+        console.error(error);
+    }
+};
+const loadProducts = async function() {
+    try {
+        const products = await (0, _helpersJs.AJAX)(`${(0, _configJs.API_URL)}`);
+        AppData.products_info.products = products;
+    } catch (error) {
+        console.error(error);
     }
 };
 
@@ -556,8 +589,10 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
 parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE);
+parcelHelpers.export(exports, "API_URL", ()=>API_URL);
 const TIMEOUT_SEC = 10;
 const RES_PER_PAGE = 20;
+const API_URL = `https://fakestoreapi.com/products/`;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {

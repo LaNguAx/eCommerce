@@ -8,7 +8,11 @@ const timeout = function (time) {
   });
 };
 //
-export const AJAX = async function (url, options, uploadData = undefined) {
+export const AJAX = async function (
+  url,
+  options = undefined,
+  uploadData = undefined
+) {
   try {
     const fetchPro = uploadData
       ? fetch(url, {

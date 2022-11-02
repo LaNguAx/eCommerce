@@ -1,7 +1,8 @@
 import * as model from './model.js';
 
-fetch('https://fakestoreapi.com/products')
-  .then(res => res.json())
-  .then(data => {
-    data.forEach(element => console.log(element.category));
-  });
+const initate = (async function () {
+  model.loadCategories();
+  model.loadProducts();
+})();
+
+console.log(model.AppData.products_info);

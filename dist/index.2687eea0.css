@@ -67,7 +67,7 @@ body {
 }
 
 .navigation-list > .navigation-item:last-child > .navigation-icon {
-  background: var(--main-text-color);
+  background: var(--misc-bg-color);
   border-radius: .5rem;
   font-size: 5rem !important;
 }

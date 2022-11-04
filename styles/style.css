@@ -2,8 +2,8 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+  padding: 0%;
+  margin: 0%;
 }
 
 :root {
@@ -20,7 +20,7 @@
   --misc-bg-color: #e9ecef;
   --navigation-border-color: #4d4d4d;
   --category-heading-color: #4d4d4d;
-  --menu-background-color: #4d4d4d90;
+  --menu-background-color: #4d4d4d81;
   --product-background-color: #f8f9fa;
 }
 
@@ -50,7 +50,6 @@ main {
 .credits-section::after {
   content: '';
   height: 0.3rem;
-  width: 90vw;
   display: block;
   margin-inline: auto;
   background-color: var(--navigation-border-color);
@@ -61,12 +60,11 @@ main {
 .main-navigation {
   background-color: #fff;
   height: 10vh;
-  width: 90vw;
+  width: 100vw;
   margin-inline: auto;
   display: flex;
   align-items: center;
-
-  margin-bottom: 0.2rem;
+  padding-inline: 10vw;
 }
 
 .main-logo-container {
@@ -349,13 +347,16 @@ main {
 .hidden {
   visibility: hidden;
   opacity: 0;
+
+  transition: 1s all;
 }
 
 .overlay {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   background-color: var(--menu-background-color);
+  filter: blur();
 
   top: 50%;
   left: 50%;
@@ -365,12 +366,16 @@ main {
 
 /* MENU */
 
-/* .menu-container {
-  position: absolute;
+.menu-container {
+  position: fixed;
   z-index: 99;
-  height: 100vh;
+  height: 90vh;
   width: 65vw;
-  background-color: black;
-  top: 0;
+  background-color: #fff;
+  top: 10vh;
   right: 0;
-} */
+  transform: translateX(100%);
+  border-left: 2px solid #4d4d4d;
+
+  transition: all 3s;
+}

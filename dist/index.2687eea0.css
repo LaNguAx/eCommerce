@@ -1,7 +1,7 @@
 *, :before, :after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  margin: 0%;
+  padding: 0%;
 }
 
 :root {
@@ -15,7 +15,7 @@
   --misc-bg-color: #e9ecef;
   --navigation-border-color: #4d4d4d;
   --category-heading-color: #4d4d4d;
-  --menu-background-color: #4d4d4d90;
+  --menu-background-color: #4d4d4d81;
   --product-background-color: #f8f9fa;
 }
 
@@ -42,7 +42,6 @@ main {
 .header:after, .credits-section:after {
   content: "";
   height: .3rem;
-  width: 90vw;
   background-color: var(--navigation-border-color);
   margin-inline: auto;
   border-radius: 50rem;
@@ -52,11 +51,11 @@ main {
 
 .main-navigation {
   height: 10vh;
-  width: 90vw;
-  margin-inline: auto;
+  width: 100vw;
   background-color: #fff;
   align-items: center;
-  margin-bottom: .2rem;
+  margin-inline: auto;
+  padding-inline: 10vw;
   display: flex;
 }
 
@@ -328,17 +327,32 @@ main {
 .hidden {
   visibility: hidden;
   opacity: 0;
+  transition: all 1s;
 }
 
 .overlay {
   width: 100%;
   height: 100%;
   background-color: var(--menu-background-color);
+  filter: blur();
   z-index: 9;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.menu-container {
+  z-index: 99;
+  height: 90vh;
+  width: 65vw;
+  background-color: #fff;
+  border-left: 2px solid #4d4d4d;
+  transition: all 3s;
+  position: fixed;
+  top: 10vh;
+  right: 0;
+  transform: translateX(100%);
 }
 
 /*# sourceMappingURL=index.2687eea0.css.map */

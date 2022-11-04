@@ -95,6 +95,7 @@ main {
 
 .navigation-icon {
   color: var(--navigation-btn-color);
+  transition: all 2s;
   font-size: 3.5rem !important;
 }
 
@@ -348,11 +349,16 @@ main {
   width: 65vw;
   background-color: #fff;
   border-left: 2px solid #4d4d4d;
-  transition: all 3s;
+  transition: all .8s ease-in-out;
   position: fixed;
   top: 10vh;
   right: 0;
   transform: translateX(100%);
+}
+
+.blur {
+  filter: blur(5px);
+  transition: all .3s ease-in-out;
 }
 
 /*# sourceMappingURL=index.2687eea0.css.map */

@@ -688,11 +688,11 @@ class HeaderView extends (0, _viewDefault.default) {
         this.#handleMenuButtonClick();
     }
      #handleMenuButtonClick() {
-        const header = document.querySelector("header");
-        header.addEventListener("click", (e)=>{
+        window.addEventListener("click", (e)=>{
             e.preventDefault();
+            const overlay = e.target.closest(".overlay");
             const menuElement = e.target.closest(`[data-btn-name="menu-btn"]`);
-            if (!menuElement) return;
+            if (!menuElement && !overlay) return;
             this.#toggleMenu();
         });
     }

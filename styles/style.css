@@ -456,3 +456,7 @@ main {
   font-size: 2rem;
   color: var(--category-heading-color);
 }
+
+li {
+  cursor: pointer;
+}

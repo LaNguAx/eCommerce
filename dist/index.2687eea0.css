@@ -434,4 +434,8 @@ main {
   display: flex;
 }
 
+li {
+  cursor: pointer;
+}
+
 /*# sourceMappingURL=index.2687eea0.css.map */

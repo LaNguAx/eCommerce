@@ -104,6 +104,13 @@ main {
   font-size: 3.5rem !important;
   color: var(--navigation-btn-color);
   transition: all 2s;
+  cursor: pointer;
+}
+
+.prevent-select {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 .flex-container {
@@ -141,8 +148,9 @@ main {
   margin-bottom: 1rem;
 }
 
-/* .btn {
-} */
+.btn {
+  cursor: pointer;
+}
 
 .btn.shop-now-btn {
   width: max-content;
@@ -348,8 +356,6 @@ main {
 .hidden {
   visibility: hidden;
   opacity: 0;
-
-  transition: 1s all;
 }
 
 .overlay {
@@ -363,6 +369,7 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9;
+  transition: 1s all;
 }
 
 /* MENU */

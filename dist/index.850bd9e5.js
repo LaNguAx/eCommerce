@@ -549,7 +549,7 @@ const initate = async function() {
 console.log(_modelJs.AppData);
 console.log(_modelJs.state);
 
-},{"./model.js":"Py0LO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/View.js":"iS7pi","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./views/headerView.js":"79wXI"}],"Py0LO":[function(require,module,exports) {
+},{"./model.js":"Py0LO","./views/View.js":"iS7pi","./views/headerView.js":"79wXI","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Py0LO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AppData", ()=>AppData);
@@ -676,6 +676,22 @@ class View {
 }
 exports.default = View;
 
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"79wXI":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class HeaderView {
+    constructor(){
+        this.#stickyNavigation();
+    }
+     #stickyNavigation() {
+        const header = document.querySelector("header");
+        const headerHeight = header.offsetHeight;
+        const mainElement = document.querySelector("main");
+        mainElement.style.marginTop = `${headerHeight}px`;
+    }
+}
+exports.default = new HeaderView();
+
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"i6XNo":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -686,28 +702,37 @@ class HeaderView extends (0, _viewDefault.default) {
     constructor(){
         super();
         this.#handleMenuButtonClick();
+        this.#handleMenuItemClick();
+    }
+     #handleMenuItemClick() {
+        this.#parentElement.addEventListener("click", function(e) {
+            e.preventDefault();
+            console.log("test");
+        });
     }
      #handleMenuButtonClick() {
         window.addEventListener("click", (e)=>{
             e.preventDefault();
-            const overlay = e.target.closest(".overlay");
             const menuElement = e.target.closest(`[data-btn-name="menu-btn"]`);
-            if (!menuElement && !overlay) return;
+            const overlay = e.target.closest(".overlay");
+            if (overlay && !overlay.classList.contains("hidden")) return this.#toggleMenu();
+            if (!menuElement) return;
             this.#toggleMenu();
         });
+    }
+     #changeMenuIcon() {
+        const menuIcon = document.querySelector(`[data-btn-name="menu-btn"] > span`);
+        menuIcon.textContent = menuIcon.textContent === "manage_search" ? "close" : "manage_search";
     }
      #toggleMenu() {
         const overlay = document.querySelector(".overlay");
         const menuContainer = document.querySelector(".menu-container");
         const mainElement = document.querySelector("main");
-        menuContainer.classList.contains("hidden") ? menuContainer.style.transform = "translateX(0)" : menuContainer.style.transform = "translateX(100%)";
         overlay.classList.toggle("hidden");
+        menuContainer.classList.contains("hidden") ? menuContainer.style.transform = "translateX(0)" : menuContainer.style.transform = "translateX(100%)";
         menuContainer.classList.toggle("hidden");
         mainElement.classList.toggle("blur");
-    // const changeIcon = btnEl.querySelector('span');
-    // changeIcon.textContent =
-    //   changeIcon.textContent === 'manage_search' ? 'close' : 'manage_search';
-    // console.log(changeIcon.textContent);
+        this.#changeMenuIcon();
     }
 }
 exports.default = new HeaderView();
@@ -724,22 +749,6 @@ class FavortiesView extends (0, _viewDefault.default) {
 }
 exports.default = new FavortiesView();
 
-},{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"79wXI":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-class HeaderView {
-    constructor(){
-        this.#stickyNavigation();
-    }
-     #stickyNavigation() {
-        const header = document.querySelector("header");
-        const headerHeight = header.offsetHeight;
-        const mainElement = document.querySelector("main");
-        mainElement.style.marginTop = `${headerHeight}px`;
-    }
-}
-exports.default = new HeaderView();
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire512a")
+},{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire512a")
 
 //# sourceMappingURL=index.850bd9e5.js.map

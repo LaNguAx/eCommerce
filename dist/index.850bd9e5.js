@@ -536,7 +536,7 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _modelJs = require("./model.js");
 var _viewJs = require("./views/View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
-var _headerViewJs = require("./headerView.js");
+var _headerViewJs = require("./views/headerView.js");
 var _headerViewJsDefault = parcelHelpers.interopDefault(_headerViewJs);
 var _menuViewJs = require("./views/menuView.js");
 var _menuViewJsDefault = parcelHelpers.interopDefault(_menuViewJs);
@@ -549,7 +549,7 @@ const initate = async function() {
 console.log(_modelJs.AppData);
 console.log(_modelJs.state);
 
-},{"./model.js":"Py0LO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/View.js":"iS7pi","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./headerView.js":"c74Sr"}],"Py0LO":[function(require,module,exports) {
+},{"./model.js":"Py0LO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/View.js":"iS7pi","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./views/headerView.js":"79wXI"}],"Py0LO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AppData", ()=>AppData);
@@ -724,7 +724,7 @@ class FavortiesView extends (0, _viewDefault.default) {
 }
 exports.default = new FavortiesView();
 
-},{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"c74Sr":[function(require,module,exports) {
+},{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"79wXI":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class HeaderView {
@@ -738,7 +738,7 @@ class HeaderView {
         mainElement.style.marginTop = `${headerHeight}px`;
     }
 }
-exports.default = HeaderView;
+exports.default = new HeaderView();
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire512a")
 

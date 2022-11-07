@@ -1,4 +1,4 @@
-export default class HeaderView {
+class HeaderView {
   constructor() {
     this.#stickyNavigation();
   }
@@ -9,3 +9,5 @@ export default class HeaderView {
     mainElement.style.marginTop = `${headerHeight}px`;
   }
 }
+
+export default new HeaderView();

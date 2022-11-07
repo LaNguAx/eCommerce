@@ -1,15 +1,16 @@
 import View from './View';
-class MenuView extends View {
+class HeaderView extends View {
   #parentElement = document.querySelector('.menu-container');
   constructor() {
     super();
     this.#handleMenuButtonClick();
   }
   #handleMenuButtonClick() {
-    window.addEventListener('click', e => {
+    const header = document.querySelector('header');
+    header.addEventListener('click', e => {
       e.preventDefault();
-      const btnElement = e.target.closest(`[data-btn-name="menu-btn"]`);
-      if (!btnElement) return;
+      const menuElement = e.target.closest(`[data-btn-name="menu-btn"]`);
+      if (!menuElement) return;
       this.#toggleMenu();
     });
   }
@@ -17,6 +18,7 @@ class MenuView extends View {
     const overlay = document.querySelector('.overlay');
     const menuContainer = document.querySelector('.menu-container');
     const mainElement = document.querySelector('main');
+
     menuContainer.classList.contains('hidden')
       ? (menuContainer.style.transform = 'translateX(0)')
       : (menuContainer.style.transform = 'translateX(100%)');
@@ -32,4 +34,4 @@ class MenuView extends View {
   }
 }
 
-export default new MenuView();
+export default new HeaderView();

@@ -536,14 +536,20 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _modelJs = require("./model.js");
 var _viewJs = require("./views/View.js");
 var _viewJsDefault = parcelHelpers.interopDefault(_viewJs);
+var _headerViewJs = require("./headerView.js");
+var _headerViewJsDefault = parcelHelpers.interopDefault(_headerViewJs);
 var _menuViewJs = require("./views/menuView.js");
 var _menuViewJsDefault = parcelHelpers.interopDefault(_menuViewJs);
+var _favoritesViewJs = require("./views/favoritesView.js");
+var _favoritesViewJsDefault = parcelHelpers.interopDefault(_favoritesViewJs);
 const initate = async function() {
     _modelJs.loadCategories();
     _modelJs.loadProducts();
 }();
+console.log(_modelJs.AppData);
+console.log(_modelJs.state);
 
-},{"./model.js":"Py0LO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/View.js":"iS7pi","./views/menuView.js":"i6XNo"}],"Py0LO":[function(require,module,exports) {
+},{"./model.js":"Py0LO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/View.js":"iS7pi","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./headerView.js":"c74Sr"}],"Py0LO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AppData", ()=>AppData);
@@ -667,15 +673,6 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class View {
     #data;
-    constructor(){
-        this.#stickyNavigation();
-    }
-     #stickyNavigation() {
-        const header = document.querySelector("header");
-        const headerHeight = header.offsetHeight;
-        const mainElement = document.querySelector("main");
-        mainElement.style.marginTop = `${headerHeight}px`;
-    }
 }
 exports.default = View;
 
@@ -684,17 +681,18 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _view = require("./View");
 var _viewDefault = parcelHelpers.interopDefault(_view);
-class MenuView extends (0, _viewDefault.default) {
+class HeaderView extends (0, _viewDefault.default) {
     #parentElement = document.querySelector(".menu-container");
     constructor(){
         super();
         this.#handleMenuButtonClick();
     }
      #handleMenuButtonClick() {
-        window.addEventListener("click", (e)=>{
+        const header = document.querySelector("header");
+        header.addEventListener("click", (e)=>{
             e.preventDefault();
-            const btnElement = e.target.closest(`[data-btn-name="menu-btn"]`);
-            if (!btnElement) return;
+            const menuElement = e.target.closest(`[data-btn-name="menu-btn"]`);
+            if (!menuElement) return;
             this.#toggleMenu();
         });
     }
@@ -712,8 +710,36 @@ class MenuView extends (0, _viewDefault.default) {
     // console.log(changeIcon.textContent);
     }
 }
-exports.default = new MenuView();
+exports.default = new HeaderView();
 
-},{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire512a")
+},{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eUTdN":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _view = require("./View");
+var _viewDefault = parcelHelpers.interopDefault(_view);
+class FavortiesView extends (0, _viewDefault.default) {
+    constructor(){
+        super();
+    }
+}
+exports.default = new FavortiesView();
+
+},{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"c74Sr":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+class HeaderView {
+    constructor(){
+        this.#stickyNavigation();
+    }
+     #stickyNavigation() {
+        const header = document.querySelector("header");
+        const headerHeight = header.offsetHeight;
+        const mainElement = document.querySelector("main");
+        mainElement.style.marginTop = `${headerHeight}px`;
+    }
+}
+exports.default = HeaderView;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire512a")
 
 //# sourceMappingURL=index.850bd9e5.js.map

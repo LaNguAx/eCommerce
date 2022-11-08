@@ -1,6 +1,6 @@
 import View from './View';
 class HeaderView extends View {
-  #parentElement = document.querySelector('.menu-container');
+  parentElement = document.querySelector('.menu-container');
   constructor() {
     super();
     this.#handleMenuButtonClick();
@@ -8,7 +8,7 @@ class HeaderView extends View {
   }
 
   #handleMenuItemClick() {
-    this.#parentElement.addEventListener('click', function (e) {
+    this.parentElement.addEventListener('click', function (e) {
       e.preventDefault();
       console.log('test');
     });

@@ -237,54 +237,61 @@ main {
   border-radius: 2rem;
   margin-bottom: 1.5rem;
   position: relative;
-  overflow: hidden;
+  box-shadow: 0 0 1rem #0003;
 }
 
 .product-headings-container {
   width: 100%;
+  background-color: #fff;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  padding: .2rem;
   display: flex;
-  position: absolute;
-  top: 2.5%;
-  left: 2.5%;
 }
 
 .product-price {
   color: var(--navigation-btn-color);
   letter-spacing: 1px;
-  font-size: 1rem;
-  font-weight: 500;
+  margin-bottom: .4rem;
+  margin-left: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .product-heading {
   color: var(--category-heading-color);
+  width: 100%;
+  white-space: nowrap;
+  margin-bottom: .2rem;
+  padding-inline: .4rem;
   font-size: 1.4rem;
-  font-weight: 600;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
 }
 
 .product-subheading {
   color: var(--main-text-color);
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-weight: 400;
 }
 
 .product-image {
   width: inherit;
-  opacity: .1;
+  height: 100%;
+  padding: 1rem;
 }
 
 .interaction-buttons-container {
   height: 3rem;
   width: 95%;
   background-color: var(--add-to-cart-btn-bg-color);
+  margin-inline: auto;
   border-radius: 50rem;
   align-items: center;
+  margin-bottom: .5rem;
   display: flex;
-  position: absolute;
-  bottom: 2.5%;
-  left: 2.5%;
   overflow: hidden;
 }
 
@@ -446,6 +453,35 @@ main {
 
 li {
   cursor: pointer;
+}
+
+.loader, .loader:after {
+  width: 10em;
+  height: 10em;
+  border-radius: 50%;
+}
+
+.loader {
+  text-indent: -9999em;
+  border-top: 1.1em solid #fff3;
+  border-bottom: 1.1em solid #fff3;
+  border-right: 1.1em solid #fff3;
+  border-left: 1.1em solid var(--add-to-cart-btn-bg-color);
+  margin: 60px auto;
+  font-size: 10px;
+  animation: 1.1s linear infinite load8;
+  position: relative;
+  transform: translateZ(0);
+}
+
+@keyframes load8 {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /*# sourceMappingURL=index.2687eea0.css.map */

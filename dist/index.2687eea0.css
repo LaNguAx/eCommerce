@@ -233,7 +233,7 @@ main {
 .product-container {
   width: 45vw;
   aspect-ratio: 1 / 1.2;
-  background-color: var(--product-background-color);
+  background-color: #fff;
   border-radius: 2rem;
   margin-bottom: 1.5rem;
   position: relative;

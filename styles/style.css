@@ -252,7 +252,8 @@ main {
   aspect-ratio: 1 / 1.2;
   margin-bottom: 1.5rem;
 
-  background-color: var(--product-background-color);
+  /* background-color: var(--product-background-color); */
+  background-color: #fff;
   position: relative;
   border-radius: 2rem;
   /* overflow: hidden; */

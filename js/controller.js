@@ -17,7 +17,7 @@ const trendingController = async function () {
 };
 
 const menuController = async function (href) {
-  // window.location.hash = `#${href}`;
+  window.location.hash = href;
   console.log(window.location.hash);
 };
 

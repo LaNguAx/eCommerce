@@ -7,10 +7,8 @@ class menuView extends View {
       const href = e.target
         .closest('.category-item')
         ?.querySelector('.category-link')
-        .getAttribute('href')
-        .slice(1);
-
-      if (!href && e.target.closest('.search-container')) return;
+        .getAttribute('href');
+      if (!href || e.target.closest('.search-container')) return;
 
       func(href);
     });

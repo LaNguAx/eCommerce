@@ -555,7 +555,7 @@ const trendingController = async function() {
     (0, _trendingViewJsDefault.default).render(_modelJs.AppData.products_info.products);
 };
 const menuController = async function(href) {
-    // window.location.hash = `#${href}`;
+    window.location.hash = href;
     console.log(window.location.hash);
 };
 const initate = async function() {
@@ -733,8 +733,8 @@ class menuView extends (0, _viewDefault.default) {
     parentElement = document.querySelector(".menu-container");
     addHandlerMenuItemClicked(func) {
         this.parentElement.addEventListener("click", function(e) {
-            const href = e.target.closest(".category-item")?.querySelector(".category-link").getAttribute("href").slice(1);
-            if (!href && e.target.closest(".search-container")) return;
+            const href = e.target.closest(".category-item")?.querySelector(".category-link").getAttribute("href");
+            if (!href || e.target.closest(".search-container")) return;
             func(href);
         });
     }
@@ -805,30 +805,56 @@ var _view = require("./View");
 var _viewDefault = parcelHelpers.interopDefault(_view);
 class mainNavigation extends (0, _viewDefault.default) {
     parentElement = document.querySelector(".main-navigation");
+    menuOpen = false;
     constructor(){
         super();
+        this.#handleNavBarClick();
         this.#handleMenuButtonClick();
-        this.#handleLogoClick();
     }
     #handleLogoClick() {
+        console.log("logo");
         document.querySelector(".main-logo").closest(".main-logo-container").addEventListener("click", function(e) {
             if (!window.location.hash) return;
             window.location.hash = "";
         });
     }
     #handleMenuButtonClick() {
+        // window.addEventListener('click', e => {
+        //   e.preventDefault();
+        //   const menuElement = e.target.closest(`[data-btn-name="menu-btn"]`);
+        //   const overlay = document.querySelector('.overlay');
+        //   const menuContainer = document.querySelector('.menu-container');
+        //   // disable scrolling while menu is open
+        //   overlay.addEventListener('touchmove', e => e.preventDefault());
+        //   menuContainer.addEventListener('touchmove', e => e.preventDefault());
+        //   if (e.target.closest('.search-container')) return;
+        //   if (overlay && !overlay.classList.contains('hidden'))
+        //     return this.#toggleMenu();
+        //   if (!menuElement) return;
+        //   this.#toggleMenu();
+        // });
+        window.addEventListener("click", (e)=>{
+            e.preventDefault();
+            if (e.target.closest('[data-btn-name="menu-btn"]')) return this.#toggleMenu();
+            if (this.menuOpen) return this.#toggleMenu();
+            return;
+        });
+    }
+    #handleCartClick() {
+        console.log("cart");
+    }
+    #handleFavoritesClick() {
+        console.log("favorites");
+    }
+    #handleNavBarClick() {
         this.parentElement.addEventListener("click", (e)=>{
             e.preventDefault();
-            const menuElement = e.target.closest(`[data-btn-name="menu-btn"]`);
-            const overlay = document.querySelector(".overlay");
-            const menuContainer = document.querySelector(".menu-container");
-            // disable scrolling while menu is open
-            overlay.addEventListener("touchmove", (e)=>e.preventDefault());
-            menuContainer.addEventListener("touchmove", (e)=>e.preventDefault());
-            if (e.target.closest(".search-container")) return;
-            if (overlay && !overlay.classList.contains("hidden")) return this.#toggleMenu();
-            if (!menuElement) return;
-            this.#toggleMenu();
+            const target = e.target;
+            console.log("test");
+            if (target.closest(".main-logo-container")) return this.#handleLogoClick();
+            if (target.closest('[data-btn-name="cart-btn"]')) return this.#handleCartClick();
+            if (target.closest('[data-btn-name="favorites-btn"]')) return this.#handleFavoritesClick();
+            return;
         });
     }
     #changeMenuIcon() {
@@ -844,6 +870,8 @@ class mainNavigation extends (0, _viewDefault.default) {
         menuContainer.classList.toggle("hidden");
         mainElement.classList.toggle("blur");
         this.#changeMenuIcon();
+        this.menuOpen = this.menuOpen === false ? this.menuOpen = true : this.menuOpen = false;
+        document.body.style.overflow = !document.body.style.overflow ? document.body.style.overflow = "hidden" : document.body.style.overflow = "";
     }
 }
 exports.default = new mainNavigation();

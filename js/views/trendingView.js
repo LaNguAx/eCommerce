@@ -22,7 +22,6 @@ class TrendingView extends View {
         </button>
       </div>
       </div>
-
       `;
       })
       .join('');

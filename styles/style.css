@@ -418,6 +418,7 @@ main {
 .menu-item {
   height: 100%;
   position: relative;
+  cursor: pointer;
 }
 
 .search-container {

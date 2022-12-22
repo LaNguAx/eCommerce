@@ -1,5 +1,3 @@
-import { mark } from 'regenerator-runtime';
-
 export default class View {
   #data;
 

@@ -389,6 +389,7 @@ main {
 
 .menu-item {
   height: 100%;
+  cursor: pointer;
   position: relative;
 }
 

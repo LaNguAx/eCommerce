@@ -39,6 +39,7 @@ class mainNavigation extends View {
     window.addEventListener('click', e => {
       e.preventDefault();
 
+      if (e.target.closest('.search-container')) return;
       if (e.target.closest('[data-btn-name="menu-btn"]'))
         return this.#toggleMenu();
       if (this.menuOpen) return this.#toggleMenu();

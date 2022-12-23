@@ -1,8 +1,8 @@
 import View from './View';
 
-class TrendingView extends View {
-  parentElement = document.querySelector('.trending-section > .products');
-
+class ProductsView extends View {
+  parentElement = document.querySelector('.products-section > .products');
+  errorMsg = `An error has occured loading the available products for this page. Please try to reload.`;
   generateMarkup(data) {
     const markup = data
       .map(product => {
@@ -30,4 +30,4 @@ class TrendingView extends View {
   }
 }
 
-export default new TrendingView();
+export default new ProductsView();

@@ -1,14 +1,14 @@
 export default class View {
   #data;
 
-  render(data, render = true) {
+  render(data, render = true, clear = true) {
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
     this.#data = data;
-    this.clear();
+    if (clear) this.clear();
     const markup = this.generateMarkup(this.#data);
     if (!render) return;
-    this.parentElement.insertAdjacentHTML('afterbegin', markup);
+    this.parentElement.insertAdjacentHTML('beforeend', markup);
   }
 
   clear() {
@@ -20,5 +20,18 @@ export default class View {
     `;
     this.clear();
     specifiecElement.insertAdjacentHTML('beforeend', markup);
+  }
+  renderHeader(heading = 'Trending', subheading = 'Our most trending items!') {
+    const mainHeading = document.querySelector('.section-heading');
+    const subHeading = document.querySelector('.section-subheading');
+
+    mainHeading.textContent = heading;
+    subHeading.textContent = subheading;
+  }
+  renderError(errorCode, error = this.errorMsg) {
+    this.clear();
+    const markup = `<div class="error"><p>${error}, ${errorCode}</p>
+  </div>`;
+    this.parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 }

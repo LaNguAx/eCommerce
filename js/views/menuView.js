@@ -1,6 +1,6 @@
 import View from './View';
 class menuView extends View {
-  parentElement = document.querySelector('.menu-container');
+  parentElement = document.querySelector('.menu-container > .menu-list');
 
   addHandlerMenuItemClicked(func) {
     this.parentElement.addEventListener('click', function (e) {
@@ -13,7 +13,16 @@ class menuView extends View {
       func(href);
     });
   }
+  generateMarkup(data) {
+    const categoryArr = data.reverse();
 
+    const markup = categoryArr.map(category => {
+      return `<li class="menu-item category-item"><a href="#${category}"class="link category-link">${
+        category[0].toUpperCase() + category.slice(1)
+      }</a></li>`;
+    });
+    return markup;
+  }
   // #handleMenuButtonClick() {
   //   window.addEventListener('click', e => {
   //     e.preventDefault();

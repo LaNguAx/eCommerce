@@ -544,26 +544,57 @@ var _favoritesViewJs = require("./views/favoritesView.js");
 var _favoritesViewJsDefault = parcelHelpers.interopDefault(_favoritesViewJs);
 var _productViewJs = require("./views/productView.js");
 var _productViewJsDefault = parcelHelpers.interopDefault(_productViewJs);
-var _trendingViewJs = require("./views/trendingView.js");
-var _trendingViewJsDefault = parcelHelpers.interopDefault(_trendingViewJs);
+var _productsViewJs = require("./views/productsView.js");
+var _productsViewJsDefault = parcelHelpers.interopDefault(_productsViewJs);
 var _mainNavigationJs = require("./views/mainNavigation.js");
 var _mainNavigationJsDefault = parcelHelpers.interopDefault(_mainNavigationJs);
-const trendingController = async function() {
-    const trendingSection = document.querySelector(".trending-section");
-    (0, _trendingViewJsDefault.default).renderSpinner(trendingSection);
-    await _modelJs.loadProducts();
-    (0, _trendingViewJsDefault.default).render(_modelJs.AppData.products_info.products);
+const productsController = async function(category) {
+    try {
+        // simply beautiful code is written here, just amazing to see that I've created such thing. Basically this code, loads the products when the website is opened and then you can also use this to load specifiec products from categories :) It can also be used for the search component later
+        if (!category) {
+            window.location.hash = "homepage";
+            _modelJs.state.currentCategory = "homepage";
+        }
+        const productsContainer = document.querySelector(".products");
+        (0, _productsViewJsDefault.default).renderSpinner(productsContainer);
+        await _modelJs.loadProducts(category);
+        (0, _productsViewJsDefault.default).renderHeader(_modelJs.state.currentCategory[0].toUpperCase() + _modelJs.state.currentCategory.slice(1), _modelJs.AppData.categories_subheading[_modelJs.state.currentCategory]);
+        (0, _productsViewJsDefault.default).render(_modelJs.AppData.products_info.products);
+    } catch (error) {
+        (0, _productsViewJsDefault.default).renderError(error);
+    }
+};
+const categoriesController = async function() {
+    try {
+        await _modelJs.loadCategories();
+        (0, _menuViewJsDefault.default).render(_modelJs.AppData.categories, true, false);
+    } catch (error) {
+        console.log(error);
+    }
 };
 const menuController = async function(href) {
-    window.location.hash = href;
-    console.log(window.location.hash);
+    try {
+        window.location.hash = href;
+        _modelJs.state.currentCategory = href.slice(1);
+        //wow this is beautifuly working, because the beautiful productsController function I have created.
+        await productsController(_modelJs.state.currentCategory);
+    } catch (error) {
+        console.log(error);
+    }
 };
 const initate = async function() {
-    await trendingController();
-    (0, _menuViewJsDefault.default).addHandlerMenuItemClicked(menuController);
+    try {
+        window.location.hash = "homepage";
+        await productsController();
+        await categoriesController();
+        (0, _menuViewJsDefault.default).addHandlerMenuItemClicked(menuController);
+        (0, _mainNavigationJsDefault.default).addHandlerLogoClicked(productsController);
+    } catch (error) {
+        console.log(error);
+    }
 }();
 
-},{"./model.js":"Py0LO","./views/View.js":"iS7pi","./views/headerView.js":"79wXI","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./views/productView.js":"iCNdF","./views/trendingView.js":"jFcsv","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/mainNavigation.js":"b02rz"}],"Py0LO":[function(require,module,exports) {
+},{"./model.js":"Py0LO","./views/View.js":"iS7pi","./views/headerView.js":"79wXI","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./views/productView.js":"iCNdF","./views/productsView.js":"c9r03","./views/mainNavigation.js":"b02rz","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"Py0LO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AppData", ()=>AppData);
@@ -574,6 +605,12 @@ var _configJs = require("./config.js");
 var _helpersJs = require("./helpers.js");
 const AppData = {
     categories: [],
+    categories_subheading: {
+        electronics: "Innovative Electronics just for you!",
+        jewelery: "Beautiful Jewelery just for you!",
+        "men's clothing": "Manly clothes for a gentleman!",
+        "women's clothing": "The wardrobe a lady needs!"
+    },
     products_info: {
         products: [],
         get product_count () {
@@ -583,30 +620,43 @@ const AppData = {
 };
 const state = {
     product: undefined,
+    currentCategory: "homepage",
     search: {
         results: [],
         page: 1,
         resultsPerPage: (0, _configJs.RES_PER_PAGE)
-    }
+    },
+    cart: [],
+    favorites: []
 };
 const loadCategories = async function() {
     try {
         const categories = [
-            ...new Set(await (0, _helpersJs.AJAX)(`${(0, _configJs.API_URL)}categories`))
+            ...new Set(await (0, _helpersJs.AJAX)(`${(0, _configJs.API_URL)}/categories`))
         ];
         AppData.categories = categories;
     } catch (error) {
-        console.error(error);
+        throw error;
     }
 };
-const loadProducts = async function() {
+const loadProducts = async function(category) {
     try {
-        const products = await (0, _helpersJs.AJAX)(`${(0, _configJs.API_URL)}`);
+        // if (!category) {
+        //   const products = await AJAX(`${API_URL}`);
+        //   AppData.products_info.products = products;
+        //   return;
+        // }
+        // const products = await AJAX(`${API_URL}/category/${category}`);
+        // AppData.products_info.products = products;
+        const products = await (0, _helpersJs.AJAX)(`${(0, _configJs.API_URL)}/${category ? `category/${category}` : ""}`);
         AppData.products_info.products = products;
     } catch (error) {
-        console.error(error);
+        throw error;
     }
-};
+}; // Get products in a specific category
+ // fetch('https://fakestoreapi.com/products/category/jewelery')
+ //             .then(res=>res.json())
+ //             .then(json=>console.log(json))
 
 },{"./config.js":"4Wc5b","./helpers.js":"6s1be","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4Wc5b":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -615,8 +665,8 @@ parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
 parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE);
 parcelHelpers.export(exports, "API_URL", ()=>API_URL);
 const TIMEOUT_SEC = 10;
-const RES_PER_PAGE = 20;
-const API_URL = `https://fakestoreapi.com/products/`;
+const RES_PER_PAGE = 10;
+const API_URL = `https://fakestoreapi.com/products`;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
@@ -687,13 +737,13 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 class View {
     #data;
-    render(data, render = true) {
+    render(data, render = true, clear = true) {
         if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
         this.#data = data;
-        this.clear();
+        if (clear) this.clear();
         const markup = this.generateMarkup(this.#data);
         if (!render) return;
-        this.parentElement.insertAdjacentHTML("afterbegin", markup);
+        this.parentElement.insertAdjacentHTML("beforeend", markup);
     }
     clear() {
         this.parentElement.innerHTML = "";
@@ -704,6 +754,18 @@ class View {
     `;
         this.clear();
         specifiecElement.insertAdjacentHTML("beforeend", markup);
+    }
+    renderHeader(heading = "Trending", subheading = "Our most trending items!") {
+        const mainHeading = document.querySelector(".section-heading");
+        const subHeading = document.querySelector(".section-subheading");
+        mainHeading.textContent = heading;
+        subHeading.textContent = subheading;
+    }
+    renderError(errorCode, error = this.errorMsg) {
+        this.clear();
+        const markup = `<div class="error"><p>${error}, ${errorCode}</p>
+  </div>`;
+        this.parentElement.insertAdjacentHTML("afterbegin", markup);
     }
 }
 exports.default = View;
@@ -730,13 +792,20 @@ parcelHelpers.defineInteropFlag(exports);
 var _view = require("./View");
 var _viewDefault = parcelHelpers.interopDefault(_view);
 class menuView extends (0, _viewDefault.default) {
-    parentElement = document.querySelector(".menu-container");
+    parentElement = document.querySelector(".menu-container > .menu-list");
     addHandlerMenuItemClicked(func) {
         this.parentElement.addEventListener("click", function(e) {
             const href = e.target.closest(".category-item")?.querySelector(".category-link").getAttribute("href");
             if (!href || e.target.closest(".search-container")) return;
             func(href);
         });
+    }
+    generateMarkup(data) {
+        const categoryArr = data.reverse();
+        const markup = categoryArr.map((category)=>{
+            return `<li class="menu-item category-item"><a href="#${category}"class="link category-link">${category[0].toUpperCase() + category.slice(1)}</a></li>`;
+        });
+        return markup;
     }
 }
 exports.default = new menuView();
@@ -766,13 +835,14 @@ class ProductView extends (0, _viewDefault.default) {
 }
 exports.default = new ProductView();
 
-},{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jFcsv":[function(require,module,exports) {
+},{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"c9r03":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _view = require("./View");
 var _viewDefault = parcelHelpers.interopDefault(_view);
-class TrendingView extends (0, _viewDefault.default) {
-    parentElement = document.querySelector(".trending-section > .products");
+class ProductsView extends (0, _viewDefault.default) {
+    parentElement = document.querySelector(".products-section > .products");
+    errorMsg = `An error has occured loading the available products for this page. Please try to reload.`;
     generateMarkup(data) {
         const markup = data.map((product)=>{
             return `
@@ -796,7 +866,7 @@ class TrendingView extends (0, _viewDefault.default) {
         return markup;
     }
 }
-exports.default = new TrendingView();
+exports.default = new ProductsView();
 
 },{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"b02rz":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -808,17 +878,16 @@ class mainNavigation extends (0, _viewDefault.default) {
     menuOpen = false;
     constructor(){
         super();
-        this.#handleNavBarClick();
         this.#handleMenuButtonClick();
     }
-    #handleLogoClick() {
-        console.log("logo");
+    addHandlerLogoClicked(func) {
         document.querySelector(".main-logo").closest(".main-logo-container").addEventListener("click", function(e) {
-            if (!window.location.hash) return;
-            window.location.hash = "";
+            e.preventDefault();
+            func();
         });
     }
     #handleMenuButtonClick() {
+        // bad code
         // window.addEventListener('click', e => {
         //   e.preventDefault();
         //   const menuElement = e.target.closest(`[data-btn-name="menu-btn"]`);
@@ -835,26 +904,9 @@ class mainNavigation extends (0, _viewDefault.default) {
         // });
         window.addEventListener("click", (e)=>{
             e.preventDefault();
+            if (e.target === document.querySelector(".menu-container")) return;
             if (e.target.closest(".search-container")) return;
-            if (e.target.closest('[data-btn-name="menu-btn"]')) return this.#toggleMenu();
-            if (this.menuOpen) return this.#toggleMenu();
-            return;
-        });
-    }
-    #handleCartClick() {
-        console.log("cart");
-    }
-    #handleFavoritesClick() {
-        console.log("favorites");
-    }
-    #handleNavBarClick() {
-        this.parentElement.addEventListener("click", (e)=>{
-            e.preventDefault();
-            const target = e.target;
-            console.log("test");
-            if (target.closest(".main-logo-container")) return this.#handleLogoClick();
-            if (target.closest('[data-btn-name="cart-btn"]')) return this.#handleCartClick();
-            if (target.closest('[data-btn-name="favorites-btn"]')) return this.#handleFavoritesClick();
+            if (e.target.closest('[data-btn-name="menu-btn"]') || this.menuOpen) return this.#toggleMenu();
             return;
         });
     }

@@ -5,22 +5,21 @@ class mainNavigation extends View {
   menuOpen = false;
   constructor() {
     super();
-    this.#handleNavBarClick();
     this.#handleMenuButtonClick();
   }
 
-  #handleLogoClick() {
-    console.log('logo');
+  addHandlerLogoClicked(func) {
     document
       .querySelector('.main-logo')
       .closest('.main-logo-container')
       .addEventListener('click', function (e) {
-        if (!window.location.hash) return;
-        window.location.hash = '';
+        e.preventDefault();
+        func();
       });
   }
 
   #handleMenuButtonClick() {
+    // bad code
     // window.addEventListener('click', e => {
     //   e.preventDefault();
     //   const menuElement = e.target.closest(`[data-btn-name="menu-btn"]`);
@@ -39,34 +38,10 @@ class mainNavigation extends View {
     window.addEventListener('click', e => {
       e.preventDefault();
 
+      if (e.target === document.querySelector('.menu-container')) return;
       if (e.target.closest('.search-container')) return;
-      if (e.target.closest('[data-btn-name="menu-btn"]'))
+      if (e.target.closest('[data-btn-name="menu-btn"]') || this.menuOpen)
         return this.#toggleMenu();
-      if (this.menuOpen) return this.#toggleMenu();
-      return;
-    });
-  }
-
-  #handleCartClick() {
-    console.log('cart');
-  }
-  #handleFavoritesClick() {
-    console.log('favorites');
-  }
-
-  #handleNavBarClick() {
-    this.parentElement.addEventListener('click', e => {
-      e.preventDefault();
-      const target = e.target;
-      console.log('test');
-      if (target.closest('.main-logo-container'))
-        return this.#handleLogoClick();
-
-      if (target.closest('[data-btn-name="cart-btn"]'))
-        return this.#handleCartClick();
-
-      if (target.closest('[data-btn-name="favorites-btn"]'))
-        return this.#handleFavoritesClick();
 
       return;
     });

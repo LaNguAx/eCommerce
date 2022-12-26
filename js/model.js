@@ -56,7 +56,19 @@ export const loadProducts = async function (category = undefined) {
     throw error;
   }
 };
-// Get products in a specific category
-// fetch('https://fakestoreapi.com/products/category/jewelery')
-//             .then(res=>res.json())
-//             .then(json=>console.log(json))
+
+export const searchResults = function (searchQuery) {
+  const foundProducts = AppData.products_info.products.filter(product =>
+    product.title.toLowerCase().includes(searchQuery)
+  );
+  return foundProducts;
+};
+
+export const loadProduct = async function (productID) {
+  try {
+    const product = await AJAX(`${API_URL}/${productID}`);
+    return product;
+  } catch (error) {
+    throw error;
+  }
+};

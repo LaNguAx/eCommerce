@@ -19,6 +19,8 @@ const productsController = async function (category = undefined) {
 
     const productsContainer = document.querySelector('.products');
 
+    productsView.changeGridLayout(2);
+
     productsView.renderSpinner(productsContainer);
 
     await model.loadProducts(category);
@@ -41,7 +43,7 @@ const categoriesController = async function () {
 
     menuView.render(model.AppData.categories, true, false);
   } catch (error) {
-    console.log(error);
+    menuView.renderError(error);
   }
 };
 
@@ -51,14 +53,62 @@ const menuController = async function (href) {
     model.state.currentCategory = href.slice(1);
     //wow this is beautifuly working, because the beautiful productsController function I have created.
     await productsController(model.state.currentCategory);
+    window.scrollTo({
+      left: 0,
+      top:
+        document.querySelector('.products-section').getBoundingClientRect()
+          .top - document.body.getBoundingClientRect().top,
+      behavior: 'smooth',
+    });
   } catch (error) {
     console.log(error);
   }
 };
 
-function searchController() {
-  console.log('working?');
-}
+const searchController = async function (searchQuery) {
+  try {
+    await model.loadProducts();
+
+    const foundProducts = model.searchResults(searchQuery);
+
+    if (!foundProducts.length)
+      throw new Error(`No products found! <br> Search query: ${searchQuery}`);
+
+    searchView.changeGridLayout(2);
+
+    searchView.renderSpinner();
+    searchView.renderHeader(
+      `Search Results`,
+      `View your search results for ' <strong>${searchQuery}</strong> '`
+    );
+
+    searchView.render(foundProducts);
+    mainNavigation.toggleMenu();
+    searchView.setScrollTo('.products-section');
+  } catch (error) {
+    searchView.renderHeader(`Oops! Something went wrong..`, `View error below`);
+
+    mainNavigation.toggleMenu();
+
+    searchView.renderError(undefined, error);
+  }
+};
+
+const productController = async function (productID) {
+  try {
+    productView.renderSpinner();
+    productView.renderHeader('', '');
+
+    const productData = [await model.loadProduct(productID)];
+
+    productView.render(productData);
+
+    productView.changeGridLayout(1);
+    productView.setScrollTo('.product-container');
+  } catch (error) {
+    productView.renderError(error);
+  }
+};
 
 const initate = (async function () {
   try {
@@ -68,6 +118,7 @@ const initate = (async function () {
     menuView.addHandlerMenuItemClicked(menuController);
     mainNavigation.addHandlerLogoClicked(productsController);
     searchView.addSearchHandler(searchController);
+    productView.addHandlerProductClicked(productController);
   } catch (error) {
     console.log(error);
   }

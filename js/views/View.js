@@ -1,4 +1,5 @@
 export default class View {
+  parentElement = document.querySelector('.products');
   #data;
 
   render(data, render = true, clear = true) {
@@ -25,13 +26,25 @@ export default class View {
     const mainHeading = document.querySelector('.section-heading');
     const subHeading = document.querySelector('.section-subheading');
 
-    mainHeading.textContent = heading;
-    subHeading.textContent = subheading;
+    mainHeading.innerHTML = heading;
+    subHeading.innerHTML = subheading;
   }
-  renderError(errorCode, error = this.errorMsg) {
+  renderError(errorCode = '', error = this.errorMsg) {
     this.clear();
-    const markup = `<div class="error"><p>${error}, ${errorCode}</p>
+    const markup = `<div class="error"><p>${error}<br> ${errorCode}</p>
   </div>`;
     this.parentElement.insertAdjacentHTML('afterbegin', markup);
+  }
+  changeGridLayout(columns) {
+    this.parentElement.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+  }
+  setScrollTo(elementRelative) {
+    window.scrollTo({
+      left: 0,
+      top:
+        document.querySelector(elementRelative).getBoundingClientRect().top -
+        document.body.getBoundingClientRect().top,
+      behavior: 'smooth',
+    });
   }
 }

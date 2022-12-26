@@ -15,6 +15,11 @@ class mainNavigation extends View {
       .addEventListener('click', function (e) {
         e.preventDefault();
         func();
+        window.scrollTo({
+          left: 0,
+          top: 0,
+          behavior: 'smooth',
+        });
       });
   }
 
@@ -30,16 +35,16 @@ class mainNavigation extends View {
     //   menuContainer.addEventListener('touchmove', e => e.preventDefault());
     //   if (e.target.closest('.search-container')) return;
     //   if (overlay && !overlay.classList.contains('hidden'))
-    //     return this.#toggleMenu();
+    //     return this.toggleMenu();
     //   if (!menuElement) return;
-    //   this.#toggleMenu();
+    //   this.toggleMenu();
     // });
     // window.addEventListener('click', e => {
     //   e.stopPropagation();
     //   if (e.target === document.querySelector('.menu-container')) return;
     //   if (e.target.closest('.search-container')) return;
     //   if (e.target.closest('[data-btn-name="menu-btn"]') || this.menuOpen)
-    //     return this.#toggleMenu();
+    //     return this.toggleMenu();
     //   console.log('test');
     //   return;
     // });
@@ -58,7 +63,7 @@ class mainNavigation extends View {
       if (e.target === document.querySelector('.menu-container')) return;
       if (e.target.closest('.search-container')) return;
       if (e.target.closest('[data-btn-name="menu-btn"]') || this.menuOpen)
-        return this.#toggleMenu();
+        return this.toggleMenu();
       return;
     });
   }
@@ -69,7 +74,7 @@ class mainNavigation extends View {
     menuIcon.textContent =
       menuIcon.textContent === 'manage_search' ? 'close' : 'manage_search';
   }
-  #toggleMenu() {
+  toggleMenu() {
     const overlay = document.querySelector('.overlay');
     const menuContainer = document.querySelector('.menu-container');
     const mainElement = document.querySelector('main');

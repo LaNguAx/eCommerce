@@ -560,7 +560,6 @@ const productsController = async function(category) {
             _modelJs.state.currentCategory = "homepage";
         }
         const productsContainer = document.querySelector(".products");
-        (0, _productsViewJsDefault.default).changeGridLayout(2);
         (0, _productsViewJsDefault.default).renderSpinner(productsContainer);
         await _modelJs.loadProducts(category);
         (0, _productsViewJsDefault.default).renderHeader(_modelJs.state.currentCategory[0].toUpperCase() + _modelJs.state.currentCategory.slice(1), _modelJs.AppData.categories_subheading[_modelJs.state.currentCategory]);
@@ -574,7 +573,7 @@ const categoriesController = async function() {
         await _modelJs.loadCategories();
         (0, _menuViewJsDefault.default).render(_modelJs.AppData.categories, true, false);
     } catch (error) {
-        (0, _menuViewJsDefault.default).renderError(error);
+        console.log(error);
     }
 };
 const menuController = async function(href) {
@@ -583,11 +582,6 @@ const menuController = async function(href) {
         _modelJs.state.currentCategory = href.slice(1);
         //wow this is beautifuly working, because the beautiful productsController function I have created.
         await productsController(_modelJs.state.currentCategory);
-        window.scrollTo({
-            left: 0,
-            top: document.querySelector(".products-section").getBoundingClientRect().top - document.body.getBoundingClientRect().top,
-            behavior: "smooth"
-        });
     } catch (error) {
         console.log(error);
     }
@@ -597,12 +591,10 @@ const searchController = async function(searchQuery) {
         await _modelJs.loadProducts();
         const foundProducts = _modelJs.searchResults(searchQuery);
         if (!foundProducts.length) throw new Error(`No products found! <br> Search query: ${searchQuery}`);
-        (0, _searchViewJsDefault.default).changeGridLayout(2);
         (0, _searchViewJsDefault.default).renderSpinner();
         (0, _searchViewJsDefault.default).renderHeader(`Search Results`, `View your search results for ' <strong>${searchQuery}</strong> '`);
         (0, _searchViewJsDefault.default).render(foundProducts);
         (0, _mainNavigationJsDefault.default).toggleMenu();
-        (0, _searchViewJsDefault.default).setScrollTo(".products-section");
     } catch (error) {
         (0, _searchViewJsDefault.default).renderHeader(`Oops! Something went wrong..`, `View error below`);
         (0, _mainNavigationJsDefault.default).toggleMenu();
@@ -610,20 +602,7 @@ const searchController = async function(searchQuery) {
     }
 };
 const productController = async function(productID) {
-    try {
-        console.log(productID);
-        (0, _productViewJsDefault.default).renderSpinner();
-        (0, _productViewJsDefault.default).renderHeader("", "");
-        const productData = [
-            await _modelJs.loadProduct(productID)
-        ];
-        console.log(productData);
-        (0, _productViewJsDefault.default).render(productData);
-        (0, _productViewJsDefault.default).changeGridLayout(1);
-        (0, _productViewJsDefault.default).setScrollTo(".product-container");
-    } catch (error) {
-        (0, _productViewJsDefault.default).renderError(error);
-    }
+    console.log(productID);
 };
 const initate = async function() {
     try {
@@ -1914,11 +1893,9 @@ const searchResults = function(searchQuery) {
 };
 const loadProduct = async function(productID) {
     try {
-        const product = await (0, _helpersJs.AJAX)(`${(0, _configJs.API_URL)}/${productID}`);
-        return product;
-    } catch (error) {
-        throw error;
-    }
+        const product = await (0, _helpersJs.AJAX)(`${(0, _configJs.API_URL)}/products/${productID}`);
+        console.log(product);
+    } catch (error) {}
 };
 
 },{"./config.js":"4Wc5b","./helpers.js":"6s1be","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4Wc5b":[function(require,module,exports) {
@@ -2027,19 +2004,9 @@ class View {
     }
     renderError(errorCode = "", error = this.errorMsg) {
         this.clear();
-        const markup = `<div class="error"><p>${error}<br> ${errorCode}</p>
+        const markup = `<div class="error"><p>${error} ${errorCode}</p>
   </div>`;
         this.parentElement.insertAdjacentHTML("afterbegin", markup);
-    }
-    changeGridLayout(columns) {
-        this.parentElement.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-    }
-    setScrollTo(elementRelative) {
-        window.scrollTo({
-            left: 0,
-            top: document.querySelector(elementRelative).getBoundingClientRect().top - document.body.getBoundingClientRect().top,
-            behavior: "smooth"
-        });
     }
 }
 exports.default = View;
@@ -2067,7 +2034,6 @@ var _view = require("./View");
 var _viewDefault = parcelHelpers.interopDefault(_view);
 class menuView extends (0, _viewDefault.default) {
     parentElement = document.querySelector(".menu-container > .menu-list");
-    errorMsg = "Categories failed loading.. Try reloading the page.";
     addHandlerMenuItemClicked(func) {
         this.parentElement.addEventListener("click", function(e) {
             const href = e.target.closest(".category-item")?.querySelector(".category-link").getAttribute("href");
@@ -2103,32 +2069,27 @@ parcelHelpers.defineInteropFlag(exports);
 var _view = require("./View");
 var _viewDefault = parcelHelpers.interopDefault(_view);
 class ProductView extends (0, _viewDefault.default) {
-    errorMsg = `An error has occured loading the requested product. Please try to reload.`;
     addHandlerProductClicked(func) {
         this.parentElement.addEventListener("click", function(e) {
             e.preventDefault();
-            const target = e.target.closest(".product-container.preview");
-            const returnsTargets = e.target.closest(".interaction-buttons-container");
-            if (!target || returnsTargets) return;
+            const target = e.target.closest(".product-container");
+            if (!target) return;
             func(target.dataset.id);
         });
     }
     generateMarkup(data) {
         const markup = data.map((product)=>{
             return `
-      <div class="product-container" data-id="${product.id}">
-      <img class="product-image " style="margin-bottom:2rem;" src="${product.image}" alt="${product.description}" />
-      <div class="product-headings-container" style="border-top: 2px solid #4d4d4d;">
-        <p class="product-heading" style="font-size: 3.2rem; white-space: initial; margin-bottom:1rem; padding-top:1rem;">${product.title}</p>
-        <p class="product-description">${product.description}</p>
-        <p class="product-stats "><span class="rating">Rating: ${"⭐".repeat(Math.round(product.rating.rate))}</span><span class="stock">Left in stock: ${product.rating.count}</span> </p>
-        <span class="product-price" style="font-size: 2.4rem; white-space: initial; margin-bottom:2rem; width: 80%; margin-inline:auto; font-weight:bold;
-        ">${product.price}$</span>
+      <div class="product-container preview" data-id="${product.id}">
+      <img class="product-image" src="${product.image}" alt="${product.description}" />
+      <div class="product-headings-container">
+        <div class="product-heading">${product.title}</div>
+        <span class="product-price">${product.price}$</span>
       </div>
-      <div class="interaction-buttons-container" style="width: 70%; height:auto;">
-        <button class="btn purchase-btn" style="font-size: 3rem; padding:1rem;">purchase</button>
+      <div class="interaction-buttons-container">
+        <button class="btn purchase-btn">purchase</button>
         <button
-          class="btn add-to-cart-btn material-symbols-outlined interaction-icon" style="font-size: 3.4rem;"
+          class="btn add-to-cart-btn material-symbols-outlined interaction-icon"
         >
           add_shopping_cart
         </button>
@@ -2189,11 +2150,6 @@ class mainNavigation extends (0, _viewDefault.default) {
         document.querySelector(".main-logo").closest(".main-logo-container").addEventListener("click", function(e) {
             e.preventDefault();
             func();
-            window.scrollTo({
-                left: 0,
-                top: 0,
-                behavior: "smooth"
-            });
         });
     }
     #handleMenuButtonClick() {
@@ -2268,7 +2224,7 @@ class SearchView extends (0, _viewDefault.default) {
     generateMarkup(data) {
         const markup = data.map((product)=>{
             return `
-      <div class="product-container preview" data-id="${product.id}">
+      <div class="product-container" data-id="${product.id}">
       <img class="product-image" src="${product.image}" alt="${product.description}" />
       <div class="product-headings-container">
         <div class="product-heading">${product.title}</div>

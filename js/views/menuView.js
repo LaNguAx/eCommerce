@@ -1,7 +1,7 @@
 import View from './View';
 class menuView extends View {
   parentElement = document.querySelector('.menu-container > .menu-list');
-
+  errorMsg = 'Categories failed loading.. Try reloading the page.';
   addHandlerMenuItemClicked(func) {
     this.parentElement.addEventListener('click', function (e) {
       const href = e.target

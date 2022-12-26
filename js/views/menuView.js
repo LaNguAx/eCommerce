@@ -14,7 +14,6 @@ class menuView extends View {
   }
   generateMarkup(data) {
     const categoryArr = data.reverse();
-    console.log(categoryArr);
     const markup = categoryArr
       .map(category => {
         return `<li class="menu-item category-item"><a href="#${category}"class="link category-link">${

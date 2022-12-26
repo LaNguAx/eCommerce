@@ -597,7 +597,6 @@ const initate = async function() {
         (0, _menuViewJsDefault.default).addHandlerMenuItemClicked(menuController);
         (0, _mainNavigationJsDefault.default).addHandlerLogoClicked(productsController);
         (0, _searchViewJsDefault.default).addSearchHandler(searchController);
-        console.log("init test");
     } catch (error) {
         console.log(error);
     }
@@ -811,7 +810,6 @@ class menuView extends (0, _viewDefault.default) {
     }
     generateMarkup(data) {
         const categoryArr = data.reverse();
-        console.log(categoryArr);
         const markup = categoryArr.map((category)=>{
             return `<li class="menu-item category-item"><a href="#${category}"class="link category-link">${category[0].toUpperCase() + category.slice(1)}</a></li>`;
         }).join("");
@@ -912,8 +910,24 @@ class mainNavigation extends (0, _viewDefault.default) {
         //   if (!menuElement) return;
         //   this.#toggleMenu();
         // });
+        // window.addEventListener('click', e => {
+        //   e.stopPropagation();
+        //   if (e.target === document.querySelector('.menu-container')) return;
+        //   if (e.target.closest('.search-container')) return;
+        //   if (e.target.closest('[data-btn-name="menu-btn"]') || this.menuOpen)
+        //     return this.#toggleMenu();
+        //   console.log('test');
+        //   return;
+        // });
+        // FINALLY I FOUND THE PROBLEM FOR THE SHIT SUBMIT FORM NOT WORKING!!!
+        // BECAUSE OF THE CODE ABOVE IT DOESNT WORK, THE WINDOW EVENT LISTENER WAS RETURNING ON IT SO IT DIDNT RESPOND. BECAUSE I PREVENTED DEFAULT TWICE ON THE WHOLE WINDOW!!!!! REMOVE THE e.preventDefault();
+        /** SOLUTION!! EVENT PROPOGATION::
+     * Why it happened?
+     * Because the eventListener was attached to the window object and everytime it fired it prevented the default behavior.
+     * Because the window.preventDefault() propogated down and it fired on the search form that's why the form didnt send, because it's behavior was prevented from the window.addlistenerEvent e.preventDefault();
+     */ //Fixed code below:
         window.addEventListener("click", (e)=>{
-            e.preventDefault();
+            e.stopPropagation();
             if (e.target === document.querySelector(".menu-container")) return;
             if (e.target.closest(".search-container")) return;
             if (e.target.closest('[data-btn-name="menu-btn"]') || this.menuOpen) return this.#toggleMenu();
@@ -949,10 +963,8 @@ class SearchView extends (0, _viewDefault.default) {
     addSearchHandler(func) {
         this.parentElement.addEventListener("submit", function(e) {
             e.preventDefault();
-            console.log("searchview test");
             func();
         });
-        console.log("addSearch test");
     }
 }
 exports.default = new SearchView();

@@ -68,7 +68,6 @@ const initate = (async function () {
     menuView.addHandlerMenuItemClicked(menuController);
     mainNavigation.addHandlerLogoClicked(productsController);
     searchView.addSearchHandler(searchController);
-    console.log('init test');
   } catch (error) {
     console.log(error);
   }

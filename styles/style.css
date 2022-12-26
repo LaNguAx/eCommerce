@@ -416,6 +416,7 @@ main {
   justify-content: space-between;
   padding-block: 1rem;
   list-style: none;
+  list-style-type: none;
 }
 .menu-item {
   height: 100%;
@@ -432,6 +433,13 @@ main {
   border-right: none;
   max-height: 25%;
 }
+
+.search-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
 .search-bar {
   height: 100%;
   width: 100%;
@@ -443,6 +451,7 @@ main {
   letter-spacing: 1px;
   text-align: center;
   padding: 1rem;
+  background: none;
 }
 .search-bar::placeholder {
   color: var(--category-heading-color);
@@ -481,6 +490,7 @@ main {
   cursor: pointer;
   font-size: 2rem;
   color: var(--category-heading-color);
+  list-style: none;
 }
 
 .category-link {

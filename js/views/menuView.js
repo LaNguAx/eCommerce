@@ -9,18 +9,19 @@ class menuView extends View {
         ?.querySelector('.category-link')
         .getAttribute('href');
       if (!href || e.target.closest('.search-container')) return;
-
       func(href);
     });
   }
   generateMarkup(data) {
     const categoryArr = data.reverse();
-
-    const markup = categoryArr.map(category => {
-      return `<li class="menu-item category-item"><a href="#${category}"class="link category-link">${
-        category[0].toUpperCase() + category.slice(1)
-      }</a></li>`;
-    });
+    console.log(categoryArr);
+    const markup = categoryArr
+      .map(category => {
+        return `<li class="menu-item category-item"><a href="#${category}"class="link category-link">${
+          category[0].toUpperCase() + category.slice(1)
+        }</a></li>`;
+      })
+      .join('');
     return markup;
   }
   // #handleMenuButtonClick() {

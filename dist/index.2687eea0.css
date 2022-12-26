@@ -404,11 +404,19 @@ main {
   display: flex;
 }
 
+.search-form {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: absolute;
+}
+
 .search-bar {
   height: 100%;
   width: 100%;
   letter-spacing: 1px;
   text-align: center;
+  background: none;
   border: none;
   padding: 1rem;
   font-family: inherit;
@@ -452,6 +460,7 @@ main {
   justify-content: center;
   align-items: center;
   font-size: 2rem;
+  list-style: none;
   display: flex;
 }
 

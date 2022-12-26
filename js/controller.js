@@ -1,3 +1,4 @@
+import 'core-js/stable';
 import * as model from './model.js';
 import View from './views/View.js';
 import HeaderView from './views/headerView.js';
@@ -6,7 +7,7 @@ import favoritesView from './views/favoritesView.js';
 import productView from './views/productView.js';
 import productsView from './views/productsView.js';
 import mainNavigation from './views/mainNavigation.js';
-
+import searchView from './views/searchView.js';
 const productsController = async function (category = undefined) {
   try {
     // simply beautiful code is written here, just amazing to see that I've created such thing. Basically this code, loads the products when the website is opened and then you can also use this to load specifiec products from categories :) It can also be used for the search component later
@@ -55,6 +56,10 @@ const menuController = async function (href) {
   }
 };
 
+function searchController() {
+  console.log('working?');
+}
+
 const initate = (async function () {
   try {
     window.location.hash = 'homepage';
@@ -62,6 +67,8 @@ const initate = (async function () {
     await categoriesController();
     menuView.addHandlerMenuItemClicked(menuController);
     mainNavigation.addHandlerLogoClicked(productsController);
+    searchView.addSearchHandler(searchController);
+    console.log('init test');
   } catch (error) {
     console.log(error);
   }

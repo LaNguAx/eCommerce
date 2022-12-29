@@ -93,7 +93,44 @@ main {
   align-items: center;
   justify-content: center;
   height: 100%;
+
+  position: relative;
+  overflow: hidden;
 }
+
+.material-symbols-outlined.add-to-navigation-icon {
+  animation: reverse add-animation 1s;
+}
+.material-symbols-outlined.remove-from-navigation-icon {
+  animation: remove-animation 1s;
+}
+@keyframes add-animation {
+  0% {
+    /* color: #000; */
+  }
+  50% {
+    color: var(--main-heading-bg-color);
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  }
+  100% {
+    color: #000;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  }
+}
+
+@keyframes remove-animation {
+  0% {
+    color: var(--main-heading-bg-color);
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  }
+  50% {
+  }
+  100% {
+    color: #000;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  }
+}
+
 .navigation-list > .navigation-item:last-child > .navigation-icon {
   font-size: 5rem !important;
   background: var(--misc-bg-color);
@@ -103,14 +140,7 @@ main {
 .navigation-icon {
   font-size: 3.5rem !important;
   color: var(--navigation-btn-color);
-  transition: all 2s;
   cursor: pointer;
-}
-
-.prevent-select {
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
 }
 
 .flex-container {
@@ -356,6 +386,8 @@ main {
   margin-bottom: 0.5rem;
   cursor: pointer;
   position: relative;
+
+  transition: background-color 0.3s;
 }
 
 .material-symbols-outlined.interaction-icon {
@@ -383,15 +415,31 @@ main {
 }
 
 .btn.add-to-cart-btn {
-  color: #fff;
+  color: red;
   /* margin-left: 0.6rem; */
-  font-size: 1.9rem;
+  font-size: 2.4rem;
   /* margin-right: 1.2rem; */
 
   position: absolute;
   right: 7.5%;
   top: 50%;
   transform: translateY(-50%);
+
+  transition: all 0.3s;
+}
+
+.add-to-cart-animation {
+  -webkit-animation: add-to-cart-anim 1s;
+  animation: add-to-cart-anim 1s;
+}
+
+@keyframes add-to-cart-anim {
+  from {
+    background-color: #fff;
+  }
+  to {
+    background-color: red;
+  }
 }
 
 .section-header {

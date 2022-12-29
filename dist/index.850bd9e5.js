@@ -552,6 +552,8 @@ var _mainNavigationJs = require("./views/mainNavigation.js");
 var _mainNavigationJsDefault = parcelHelpers.interopDefault(_mainNavigationJs);
 var _searchViewJs = require("./views/searchView.js");
 var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
+var _cartViewJs = require("./views/cartView.js");
+var _cartViewJsDefault = parcelHelpers.interopDefault(_cartViewJs);
 const productsController = async function(category) {
     try {
         // simply beautiful code is written here, just amazing to see that I've created such thing. Basically this code, loads the products when the website is opened and then you can also use this to load specifiec products from categories :) It can also be used for the search component later
@@ -611,19 +613,20 @@ const searchController = async function(searchQuery) {
 };
 const productController = async function(productID) {
     try {
-        console.log(productID);
         (0, _productViewJsDefault.default).renderSpinner();
-        (0, _productViewJsDefault.default).renderHeader("", "");
+        (0, _productViewJsDefault.default).renderHeader();
         const productData = [
             await _modelJs.loadProduct(productID)
         ];
-        console.log(productData);
         (0, _productViewJsDefault.default).render(productData);
         (0, _productViewJsDefault.default).changeGridLayout(1);
         (0, _productViewJsDefault.default).setScrollTo(".product-container");
     } catch (error) {
         (0, _productViewJsDefault.default).renderError(error);
     }
+};
+const cartController = function(productID) {
+    console.log("cart controller");
 };
 const initate = async function() {
     try {
@@ -634,12 +637,13 @@ const initate = async function() {
         (0, _mainNavigationJsDefault.default).addHandlerLogoClicked(productsController);
         (0, _searchViewJsDefault.default).addSearchHandler(searchController);
         (0, _productViewJsDefault.default).addHandlerProductClicked(productController);
+        (0, _cartViewJsDefault.default).addHandlerAddToCartClicked(cartController);
     } catch (error) {
         console.log(error);
     }
 }();
 
-},{"core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model.js":"Py0LO","./views/View.js":"iS7pi","./views/headerView.js":"79wXI","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./views/productView.js":"iCNdF","./views/productsView.js":"c9r03","./views/mainNavigation.js":"b02rz","./views/searchView.js":"jYSxB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gSXXb":[function(require,module,exports) {
+},{"core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model.js":"Py0LO","./views/View.js":"iS7pi","./views/headerView.js":"79wXI","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./views/productView.js":"iCNdF","./views/productsView.js":"c9r03","./views/mainNavigation.js":"b02rz","./views/searchView.js":"jYSxB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/cartView.js":"lAdwg"}],"gSXXb":[function(require,module,exports) {
 var global = require("962cc8592522751");
 var DESCRIPTORS = require("c5322ba2b93eecd");
 var defineBuiltInAccessor = require("89278e8349d44987");
@@ -2019,7 +2023,7 @@ class View {
         this.clear();
         specifiecElement.insertAdjacentHTML("beforeend", markup);
     }
-    renderHeader(heading = "Trending", subheading = "Our most trending items!") {
+    renderHeader(heading = "", subheading = "") {
         const mainHeading = document.querySelector(".section-heading");
         const subHeading = document.querySelector(".section-subheading");
         mainHeading.innerHTML = heading;
@@ -2160,7 +2164,7 @@ class ProductsView extends (0, _viewDefault.default) {
       <div class="interaction-buttons-container">
         <button class="btn purchase-btn">purchase</button>
         <button
-          class="btn add-to-cart-btn material-symbols-outlined interaction-icon"
+          class="btn add-to-cart-btn material-symbols-outlined interaction-icon" data-id=${product.id}
         >
           add_shopping_cart
         </button>
@@ -2298,6 +2302,40 @@ class SearchView extends (0, _viewDefault.default) {
     }
 }
 exports.default = new SearchView();
+
+},{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lAdwg":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _view = require("./View");
+var _viewDefault = parcelHelpers.interopDefault(_view);
+class CartView extends (0, _viewDefault.default) {
+    addHandlerAddToCartClicked(func) {
+        this.parentElement.addEventListener("click", (function(e) {
+            e.preventDefault();
+            const target = e.target.closest(".btn.add-to-cart-btn");
+            if (!target) return;
+            this.addToCartAnimation(target);
+            func(target.dataset.id);
+        }).bind(this));
+    }
+    addToCartAnimation(targetCart) {
+        const cartIcon = document.querySelector('[data-btn-name="cart-btn"] > span');
+        const favoritesIcon = document.querySelector('[data-btn-name="favorites-btn"] > span');
+        const animationFunc = function(element) {
+            element.classList.add("add-to-navigation-icon");
+            setTimeout(()=>{
+                element.classList.add("remove-from-navigation-icon");
+                element.classList.remove("add-to-navigation-icon");
+                setTimeout(()=>{
+                    element.classList.remove("remove-from-navigation-icon");
+                }, 1000);
+            }, 800);
+        };
+        animationFunc(cartIcon);
+        animationFunc(favoritesIcon);
+    }
+}
+exports.default = new CartView();
 
 },{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire512a")
 

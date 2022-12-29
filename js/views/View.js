@@ -22,7 +22,7 @@ export default class View {
     this.clear();
     specifiecElement.insertAdjacentHTML('beforeend', markup);
   }
-  renderHeader(heading = 'Trending', subheading = 'Our most trending items!') {
+  renderHeader(heading = '', subheading = '') {
     const mainHeading = document.querySelector('.section-heading');
     const subHeading = document.querySelector('.section-subheading');
 

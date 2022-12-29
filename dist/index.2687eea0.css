@@ -85,6 +85,46 @@ main {
   justify-content: center;
   align-items: center;
   display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.material-symbols-outlined.add-to-navigation-icon {
+  animation: 1s reverse add-animation;
+}
+
+.material-symbols-outlined.remove-from-navigation-icon {
+  animation: 1s remove-animation;
+}
+
+@keyframes add-animation {
+  0% {
+  }
+
+  50% {
+    color: var(--main-heading-bg-color);
+    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
+  }
+
+  100% {
+    color: #000;
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+  }
+}
+
+@keyframes remove-animation {
+  0% {
+    color: var(--main-heading-bg-color);
+    font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
+  }
+
+  50% {
+  }
+
+  100% {
+    color: #000;
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+  }
 }
 
 .navigation-list > .navigation-item:last-child > .navigation-icon {
@@ -96,13 +136,7 @@ main {
 .navigation-icon {
   color: var(--navigation-btn-color);
   cursor: pointer;
-  transition: all 2s;
   font-size: 3.5rem !important;
-}
-
-.prevent-select {
-  -webkit-user-select: none;
-  user-select: none;
 }
 
 .flex-container {
@@ -325,6 +359,7 @@ main {
   border-radius: 50rem;
   align-items: center;
   margin-bottom: .5rem;
+  transition: background-color .3s;
   display: flex;
   position: relative;
   overflow: hidden;
@@ -356,12 +391,27 @@ main {
 }
 
 .btn.add-to-cart-btn {
-  color: #fff;
-  font-size: 1.9rem;
+  color: red;
+  font-size: 2.4rem;
+  transition: all .3s;
   position: absolute;
   top: 50%;
   right: 7.5%;
   transform: translateY(-50%);
+}
+
+.add-to-cart-animation {
+  animation: 1s add-to-cart-anim;
+}
+
+@keyframes add-to-cart-anim {
+  from {
+    background-color: #fff;
+  }
+
+  to {
+    background-color: red;
+  }
 }
 
 .section-header {

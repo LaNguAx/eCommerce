@@ -8,7 +8,6 @@ class ProductView extends View {
       e.preventDefault();
       const target = e.target.closest('.product-container.preview');
       const returnsTargets = e.target.closest('.interaction-buttons-container');
-
       if (!target || returnsTargets) return;
 
       func(target.dataset.id);

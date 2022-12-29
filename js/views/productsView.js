@@ -15,7 +15,7 @@ class ProductsView extends View {
       <div class="interaction-buttons-container">
         <button class="btn purchase-btn">purchase</button>
         <button
-          class="btn add-to-cart-btn material-symbols-outlined interaction-icon"
+          class="btn add-to-cart-btn material-symbols-outlined interaction-icon" data-id=${product.id}
         >
           add_shopping_cart
         </button>

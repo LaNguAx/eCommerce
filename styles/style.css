@@ -286,7 +286,7 @@ main {
 /* PRODUCT */
 
 .product-container {
-  width: 100%;
+  width: inherit;
   aspect-ratio: 1 / 1.2;
   margin-bottom: 1.5rem;
 
@@ -455,6 +455,7 @@ main {
 }
 
 .products {
+  width: inherit;
   margin-inline: auto;
 
   place-content: center;

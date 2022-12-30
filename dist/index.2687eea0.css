@@ -269,7 +269,7 @@ body {
 }
 
 .product-container {
-  width: 100%;
+  width: inherit;
   aspect-ratio: 1 / 1.2;
   background-color: #fff;
   border-radius: 2rem;
@@ -424,6 +424,7 @@ body {
 }
 
 .products {
+  width: inherit;
   place-content: center;
   place-items: center;
   margin-inline: auto;

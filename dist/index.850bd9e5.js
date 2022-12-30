@@ -627,6 +627,7 @@ const productController = async function(productID) {
 };
 const cartController = function(productID) {
     console.log("cart controller");
+    console.log(productID);
 };
 const initate = async function() {
     try {
@@ -643,7 +644,7 @@ const initate = async function() {
     }
 }();
 
-},{"core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model.js":"Py0LO","./views/View.js":"iS7pi","./views/headerView.js":"79wXI","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./views/productView.js":"iCNdF","./views/productsView.js":"c9r03","./views/mainNavigation.js":"b02rz","./views/searchView.js":"jYSxB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./views/cartView.js":"lAdwg"}],"gSXXb":[function(require,module,exports) {
+},{"core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model.js":"Py0LO","./views/View.js":"iS7pi","./views/headerView.js":"79wXI","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./views/productView.js":"iCNdF","./views/productsView.js":"c9r03","./views/mainNavigation.js":"b02rz","./views/searchView.js":"jYSxB","./views/cartView.js":"lAdwg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gSXXb":[function(require,module,exports) {
 var global = require("962cc8592522751");
 var DESCRIPTORS = require("c5322ba2b93eecd");
 var defineBuiltInAccessor = require("89278e8349d44987");
@@ -802,6 +803,7 @@ module.exports = $documentAll.IS_HTMLDDA ? function(argument) {
 },{"13ef1f9eef43f90a":"5MHqB"}],"5MHqB":[function(require,module,exports) {
 var documentAll = typeof document == "object" && document.all;
 // https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
 var IS_HTMLDDA = typeof documentAll == "undefined" && documentAll !== undefined;
 module.exports = {
     all: documentAll,
@@ -1284,10 +1286,10 @@ var store = require("bf7c4283d920469e");
 (module.exports = function(key, value) {
     return store[key] || (store[key] = value !== undefined ? value : {});
 })("versions", []).push({
-    version: "3.26.1",
+    version: "3.27.1",
     mode: IS_PURE ? "pure" : "global",
     copyright: "\xa9 2014-2022 Denis Pushkarev (zloirock.ru)",
-    license: "https://github.com/zloirock/core-js/blob/v3.26.1/LICENSE",
+    license: "https://github.com/zloirock/core-js/blob/v3.27.1/LICENSE",
     source: "https://github.com/zloirock/core-js"
 });
 
@@ -1838,7 +1840,10 @@ module.exports = classof(global.process) == "process";
 },{"59f6778e1e746cb0":"bdfmm","606df7597d174036":"i8HOC"}],"l7FDS":[function(require,module,exports) {
 var $ = require("bf972fdce83d237e");
 var global = require("7c26606e520cd5d5");
-var setImmediate = require("9d6d6ac362873c2a").set;
+var setTask = require("9d6d6ac362873c2a").set;
+var schedulersFix = require("14769128952da350");
+// https://github.com/oven-sh/bun/issues/1633
+var setImmediate = global.setImmediate ? schedulersFix(setTask, false) : setTask;
 // `setImmediate` method
 // http://w3c.github.io/setImmediate/#si-setImmediate
 $({
@@ -1850,7 +1855,41 @@ $({
     setImmediate: setImmediate
 });
 
-},{"bf972fdce83d237e":"dIGt4","7c26606e520cd5d5":"i8HOC","9d6d6ac362873c2a":"7jDg7"}],"Py0LO":[function(require,module,exports) {
+},{"bf972fdce83d237e":"dIGt4","7c26606e520cd5d5":"i8HOC","9d6d6ac362873c2a":"7jDg7","14769128952da350":"cAPb6"}],"cAPb6":[function(require,module,exports) {
+"use strict";
+var global = require("4812e44dce760548");
+var apply = require("17851dcfc2f942f");
+var isCallable = require("907b93c062836c65");
+var ENGINE_IS_BUN = require("2341f726c3dd2d06");
+var USER_AGENT = require("421e5d85007e0d11");
+var arraySlice = require("32da69cf2f6ae5c5");
+var validateArgumentsLength = require("66cf8a907c575ca6");
+var Function = global.Function;
+// dirty IE9- and Bun 0.3.0- checks
+var WRAP = /MSIE .\./.test(USER_AGENT) || ENGINE_IS_BUN && function() {
+    var version = global.Bun.version.split(".");
+    return version.length < 3 || version[0] == 0 && (version[1] < 3 || version[1] == 3 && version[2] == 0);
+}();
+// IE9- / Bun 0.3.0- setTimeout / setInterval / setImmediate additional parameters fix
+// https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers
+// https://github.com/oven-sh/bun/issues/1633
+module.exports = function(scheduler, hasTimeArg) {
+    var firstParamIndex = hasTimeArg ? 2 : 1;
+    return WRAP ? function(handler, timeout /* , ...arguments */ ) {
+        var boundArgs = validateArgumentsLength(arguments.length, 1) > firstParamIndex;
+        var fn = isCallable(handler) ? handler : Function(handler);
+        var params = boundArgs ? arraySlice(arguments, firstParamIndex) : [];
+        var callback = boundArgs ? function() {
+            apply(fn, this, params);
+        } : fn;
+        return hasTimeArg ? scheduler(callback, timeout) : scheduler(callback);
+    } : scheduler;
+};
+
+},{"4812e44dce760548":"i8HOC","17851dcfc2f942f":"148ka","907b93c062836c65":"l3Kyn","2341f726c3dd2d06":"2BA6V","421e5d85007e0d11":"73xBt","32da69cf2f6ae5c5":"RsFXo","66cf8a907c575ca6":"b9O3D"}],"2BA6V":[function(require,module,exports) {
+/* global Bun -- Deno case */ module.exports = typeof Bun == "function" && Bun && typeof Bun.version == "string";
+
+},{}],"Py0LO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "AppData", ()=>AppData);
@@ -2233,12 +2272,23 @@ class mainNavigation extends (0, _viewDefault.default) {
             if (e.target === document.querySelector(".menu-container")) return;
             if (e.target.closest(".search-container")) return;
             if (e.target.closest('[data-btn-name="menu-btn"]') || this.menuOpen) return this.toggleMenu();
+            if (e.target.closest('[data-btn-name="cart-btn"]')) return this.#toggleCart();
             return;
         });
     }
     #changeMenuIcon() {
         const menuIcon = document.querySelector(`[data-btn-name="menu-btn"] > span`);
         menuIcon.textContent = menuIcon.textContent === "manage_search" ? "close" : "manage_search";
+    }
+    #toggleCart() {
+        const overlay = document.querySelector(".overlay");
+        const mainElement = document.querySelector("main");
+        const cartContainer = document.querySelector(".cart-container");
+        overlay.classList.toggle("hidden");
+        cartContainer.classList.contains("hidden") ? cartContainer.style.transform = "translateX(0)" : cartContainer.style.transform = "translateX(-100%)";
+        cartContainer.classList.toggle("hidden");
+        mainElement.classList.toggle("blur");
+        document.body.style.overflow = !document.body.style.overflow ? document.body.style.overflow = "hidden" : document.body.style.overflow = "";
     }
     toggleMenu() {
         const overlay = document.querySelector(".overlay");
@@ -2310,13 +2360,12 @@ class CartView extends (0, _viewDefault.default) {
             e.preventDefault();
             const target = e.target.closest(".btn.add-to-cart-btn");
             if (!target) return;
-            this.addToCartAnimation(target);
+            this.#addToCartAnimation();
             func(target.dataset.id);
         }).bind(this));
     }
-    addToCartAnimation(targetCart) {
+    #addToCartAnimation() {
         const cartIcon = document.querySelector('[data-btn-name="cart-btn"] > span');
-        const favoritesIcon = document.querySelector('[data-btn-name="favorites-btn"] > span');
         const animationFunc = function(element) {
             element.classList.add("add-to-navigation-icon");
             setTimeout(()=>{
@@ -2328,7 +2377,6 @@ class CartView extends (0, _viewDefault.default) {
             }, 800);
         };
         animationFunc(cartIcon);
-        animationFunc(favoritesIcon);
     }
 }
 exports.default = new CartView();

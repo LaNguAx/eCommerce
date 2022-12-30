@@ -1,4 +1,4 @@
-import 'core-js/stable';
+import 'core-js/actual';
 import * as model from './model.js';
 import View from './views/View.js';
 import HeaderView from './views/headerView.js';
@@ -113,6 +113,7 @@ const productController = async function (productID) {
 
 const cartController = function (productID) {
   console.log('cart controller');
+  console.log(productID);
 };
 
 const initate = (async function () {

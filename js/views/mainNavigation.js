@@ -64,6 +64,9 @@ class mainNavigation extends View {
       if (e.target.closest('.search-container')) return;
       if (e.target.closest('[data-btn-name="menu-btn"]') || this.menuOpen)
         return this.toggleMenu();
+
+      if (e.target.closest('[data-btn-name="cart-btn"]'))
+        return this.#toggleCart();
       return;
     });
   }
@@ -74,6 +77,24 @@ class mainNavigation extends View {
     menuIcon.textContent =
       menuIcon.textContent === 'manage_search' ? 'close' : 'manage_search';
   }
+  #toggleCart() {
+    const overlay = document.querySelector('.overlay');
+    const mainElement = document.querySelector('main');
+    const cartContainer = document.querySelector('.cart-container');
+    overlay.classList.toggle('hidden');
+
+    cartContainer.classList.contains('hidden')
+      ? (cartContainer.style.transform = 'translateX(0)')
+      : (cartContainer.style.transform = 'translateX(-100%)');
+
+    cartContainer.classList.toggle('hidden');
+    mainElement.classList.toggle('blur');
+
+    document.body.style.overflow = !document.body.style.overflow
+      ? (document.body.style.overflow = 'hidden')
+      : (document.body.style.overflow = '');
+  }
+
   toggleMenu() {
     const overlay = document.querySelector('.overlay');
     const menuContainer = document.querySelector('.menu-container');

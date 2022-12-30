@@ -625,4 +625,122 @@ li {
   font-size: 2rem;
 }
 
+.cart-container {
+  z-index: 9999;
+  height: 95vh;
+  width: 65%;
+  background-color: #fff;
+  border-right: 2px solid #4d4d4d;
+  flex-direction: column;
+  transition: all .8s ease-in-out;
+  display: flex;
+  position: fixed;
+  top: 10vh;
+  left: 0;
+  transform: translateX(-100%);
+}
+
+.cart-headings-container {
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  display: flex;
+}
+
+.cart-heading {
+  color: var(--category-heading-color);
+  font-size: 2.4rem;
+}
+
+.cart-subheading {
+  color: var(--secondary-heading-color);
+  font-size: 1.6rem;
+}
+
+.cart-list {
+  height: 60%;
+  flex: 0 auto;
+  margin-top: .5rem;
+  list-style: none;
+  overflow: auto;
+}
+
+.cart-item {
+  width: 100%;
+  padding: .5rem;
+  transition: opacity .3s;
+  display: flex;
+}
+
+.cart-item:hover {
+  opacity: .5;
+}
+
+.cart-image-container {
+  width: 20%;
+  align-items: flex-end;
+  display: flex;
+}
+
+.cart-image {
+  width: 100%;
+  border-radius: 50%;
+}
+
+.cart-item-details {
+  width: 75%;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: auto;
+  font-size: 1.6rem;
+  display: flex;
+}
+
+.cart-item-name {
+  width: 100%;
+  white-space: nowrap;
+  color: var(--category-heading-color);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+}
+
+.cart-item-attributes {
+  width: 85%;
+  color: var(--secondary-heading-color);
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-inline: auto;
+  font-size: 1.2rem;
+  display: flex;
+}
+
+.cart-item-price {
+  font-weight: 500;
+}
+
+.continue-purchase-container {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.btn.continue-purchase {
+  background-color: var(--purchase-btn-bg-color);
+  color: #fff;
+  letter-spacing: 1px;
+  padding: .5rem;
+  font-size: 1.8rem;
+  font-weight: 500;
+  transform: translateY(-50%);
+}
+
+.divider {
+  width: 100%;
+  height: 2px;
+  background-color: var(--category-heading-color);
+}
+
 /*# sourceMappingURL=index.2687eea0.css.map */

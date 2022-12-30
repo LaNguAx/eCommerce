@@ -8,20 +8,15 @@ class CartView extends View {
         e.preventDefault();
         const target = e.target.closest('.btn.add-to-cart-btn');
         if (!target) return;
-        this.addToCartAnimation(target);
+        this.#addToCartAnimation();
         func(target.dataset.id);
       }.bind(this)
     );
   }
-  addToCartAnimation(targetCart) {
+  #addToCartAnimation() {
     const cartIcon = document.querySelector(
       '[data-btn-name="cart-btn"] > span'
     );
-
-    const favoritesIcon = document.querySelector(
-      '[data-btn-name="favorites-btn"] > span'
-    );
-
     const animationFunc = function (element) {
       element.classList.add('add-to-navigation-icon');
       setTimeout(() => {
@@ -32,9 +27,7 @@ class CartView extends View {
         }, 1000);
       }, 800);
     };
-
     animationFunc(cartIcon);
-    animationFunc(favoritesIcon);
   }
 }
 

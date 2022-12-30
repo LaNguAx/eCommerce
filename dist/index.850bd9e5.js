@@ -2056,10 +2056,42 @@ class HeaderView {
         this.#stickyNavigation();
     }
     #stickyNavigation() {
-        const header = document.querySelector("header");
-        const headerHeight = header.offsetHeight;
-        const mainElement = document.querySelector("main");
-        mainElement.style.marginTop = `${headerHeight}px`;
+        //   const sectionHeroEl = document.querySelector('.header');
+        //   const obs = new IntersectionObserver(
+        //     function (entries) {
+        //       const ent = entries[0];
+        //       console.log(ent);
+        //       if (ent.isIntersecting === false) {
+        //         // sectionHeroEl.classList.add('sticky');
+        //         console.log('not intersecting');
+        //       }
+        //       if (ent.isIntersecting === true) {
+        //         // sectionHeroEl.classList.remove('sticky');
+        //         console.log('is intersecting');
+        //       }
+        //     },
+        //     {
+        //       // In the viewport
+        //       root: null,
+        //       threshold: 1,
+        //       rootMargin: `${sectionHeroEl.offsetHeight}px`,
+        //     }
+        //   );
+        //   obs.observe(sectionHeroEl);
+        // }
+        const creditsSection = document.querySelector(".credits-section");
+        const header = document.querySelector(".header");
+        const observer = new IntersectionObserver(function(entries) {
+            const [entry] = entries;
+            console.log(entry);
+            if (!entry.isIntersecting) header.classList.add("sticky");
+            if (entry.isIntersecting) header.classList.remove("sticky");
+        }, {
+            root: null,
+            threshold: 0,
+            rootMargin: ""
+        });
+        observer.observe(creditsSection);
     }
 }
 exports.default = new HeaderView();
@@ -2095,9 +2127,6 @@ parcelHelpers.defineInteropFlag(exports);
 var _view = require("./View");
 var _viewDefault = parcelHelpers.interopDefault(_view);
 class FavortiesView extends (0, _viewDefault.default) {
-    constructor(){
-        super();
-    }
 }
 exports.default = new FavortiesView();
 

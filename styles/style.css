@@ -265,6 +265,15 @@ body {
   color: red;
 }
 
+.material-symbols-outlined {
+  transition: color 0.5s;
+}
+
+.material-symbols-outlined.cart-fill {
+  font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+  color: var(--main-heading-bg-color);
+}
+
 .credits-text {
   color: var(--main-text-color);
   font-size: 1.3rem;
@@ -407,7 +416,6 @@ body {
 .purchase-btn {
   height: 100%;
   width: 75%;
-  margin-right: auto;
   font-size: 1.8rem;
   background-color: var(--purchase-btn-bg-color);
   color: #fff;
@@ -685,7 +693,7 @@ li {
 .cart-container {
   position: fixed;
   z-index: 9999;
-  height: 95vh;
+  height: 90vh;
   width: 65%;
   background-color: #fff;
   top: 10vh;
@@ -721,7 +729,7 @@ li {
   margin-top: 0.5rem;
   list-style: none;
   list-style-type: none;
-  height: 60%;
+  height: 65%;
   overflow: auto;
   flex: 0 1 auto;
 }
@@ -794,7 +802,6 @@ li {
   font-weight: 500;
 
   letter-spacing: 1px;
-  transform: translateY(-50%);
 }
 
 .divider {

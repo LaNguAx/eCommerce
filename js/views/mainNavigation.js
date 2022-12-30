@@ -1,13 +1,12 @@
 import View from './View';
 
 class mainNavigation extends View {
-  parentElement = document.querySelector('.main-navigation');
   menuOpen = false;
+  cartOpen = false;
   constructor() {
     super();
-    this.#handleMenuButtonClick();
+    this.#handleMenusClick();
   }
-
   addHandlerLogoClicked(func) {
     document
       .querySelector('.main-logo')
@@ -23,53 +22,73 @@ class mainNavigation extends View {
       });
   }
 
-  #handleMenuButtonClick() {
-    // bad code
-    // window.addEventListener('click', e => {
-    //   e.preventDefault();
-    //   const menuElement = e.target.closest(`[data-btn-name="menu-btn"]`);
-    //   const overlay = document.querySelector('.overlay');
-    //   const menuContainer = document.querySelector('.menu-container');
-    //   // disable scrolling while menu is open
-    //   overlay.addEventListener('touchmove', e => e.preventDefault());
-    //   menuContainer.addEventListener('touchmove', e => e.preventDefault());
-    //   if (e.target.closest('.search-container')) return;
-    //   if (overlay && !overlay.classList.contains('hidden'))
-    //     return this.toggleMenu();
-    //   if (!menuElement) return;
-    //   this.toggleMenu();
-    // });
-    // window.addEventListener('click', e => {
-    //   e.stopPropagation();
-    //   if (e.target === document.querySelector('.menu-container')) return;
-    //   if (e.target.closest('.search-container')) return;
-    //   if (e.target.closest('[data-btn-name="menu-btn"]') || this.menuOpen)
-    //     return this.toggleMenu();
-    //   console.log('test');
-    //   return;
-    // });
-    // FINALLY I FOUND THE PROBLEM FOR THE SHIT SUBMIT FORM NOT WORKING!!!
-    // BECAUSE OF THE CODE ABOVE IT DOESNT WORK, THE WINDOW EVENT LISTENER WAS RETURNING ON IT SO IT DIDNT RESPOND. BECAUSE I PREVENTED DEFAULT TWICE ON THE WHOLE WINDOW!!!!! REMOVE THE e.preventDefault();
-
-    /** SOLUTION!! EVENT PROPOGATION::
-     * Why it happened?
-     * Because the eventListener was attached to the window object and everytime it fired it prevented the default behavior.
-     * Because the window.preventDefault() propogated down and it fired on the search form that's why the form didnt send, because it's behavior was prevented from the window.addlistenerEvent e.preventDefault();
-     */
-
-    //Fixed code below:
+  #handleMenusClick() {
     window.addEventListener('click', e => {
       e.stopPropagation();
+      const target = e.target;
+
+      if (e.target.closest('.cart-container')) return;
       if (e.target === document.querySelector('.menu-container')) return;
       if (e.target.closest('.search-container')) return;
-      if (e.target.closest('[data-btn-name="menu-btn"]') || this.menuOpen)
-        return this.toggleMenu();
 
-      if (e.target.closest('[data-btn-name="cart-btn"]'))
-        return this.#toggleCart();
-      return;
+      if (target.closest('[data-btn-name="menu-btn"]') || this.menuOpen)
+        return this.toggleMenu();
+      if (target.closest('[data-btn-name="cart-btn"]') || this.cartOpen)
+        return this.toggleCart();
     });
   }
+
+  toggleCart() {
+    const cartContainer = document.querySelector('.cart-container');
+    const overlay = document.querySelector('.overlay');
+    const mainElement = document.querySelector('main');
+
+    this.cartOpen = this.cartOpen
+      ? (this.cartOpen = false)
+      : (this.cartOpen = true);
+
+    if (this.menuOpen) this.toggleMenu();
+
+    cartContainer.classList.contains('hidden')
+      ? (cartContainer.style.transform = 'translateX(0)')
+      : (cartContainer.style.transform = 'translateX(-100%)');
+
+    overlay.classList.toggle('hidden');
+    cartContainer.classList.toggle('hidden');
+    mainElement.classList.toggle('blur');
+
+    this.#changeCartIcon();
+
+    document.body.style.overflow = !document.body.style.overflow
+      ? (document.body.style.overflow = 'hidden')
+      : (document.body.style.overflow = '');
+  }
+  toggleMenu() {
+    const menuContainer = document.querySelector('.menu-container');
+    const overlay = document.querySelector('.overlay');
+    const mainElement = document.querySelector('main');
+
+    this.menuOpen = this.menuOpen
+      ? (this.menuOpen = false)
+      : (this.menuOpen = true);
+
+    if (this.cartOpen) this.toggleCart();
+
+    menuContainer.classList.contains('hidden')
+      ? (menuContainer.style.transform = 'translateX(0)')
+      : (menuContainer.style.transform = 'translateX(100%)');
+
+    overlay.classList.toggle('hidden');
+    menuContainer.classList.toggle('hidden');
+    mainElement.classList.toggle('blur');
+
+    this.#changeMenuIcon();
+
+    document.body.style.overflow = !document.body.style.overflow
+      ? (document.body.style.overflow = 'hidden')
+      : (document.body.style.overflow = '');
+  }
+
   #changeMenuIcon() {
     const menuIcon = document.querySelector(
       `[data-btn-name="menu-btn"] > span`
@@ -77,45 +96,14 @@ class mainNavigation extends View {
     menuIcon.textContent =
       menuIcon.textContent === 'manage_search' ? 'close' : 'manage_search';
   }
-  #toggleCart() {
-    const overlay = document.querySelector('.overlay');
-    const mainElement = document.querySelector('main');
-    const cartContainer = document.querySelector('.cart-container');
-    overlay.classList.toggle('hidden');
+  #changeCartIcon() {
+    const cartIcon = document.querySelector(
+      '[data-btn-name="cart-btn"] > span'
+    );
 
-    cartContainer.classList.contains('hidden')
-      ? (cartContainer.style.transform = 'translateX(0)')
-      : (cartContainer.style.transform = 'translateX(-100%)');
-
-    cartContainer.classList.toggle('hidden');
-    mainElement.classList.toggle('blur');
-
-    document.body.style.overflow = !document.body.style.overflow
-      ? (document.body.style.overflow = 'hidden')
-      : (document.body.style.overflow = '');
-  }
-
-  toggleMenu() {
-    const overlay = document.querySelector('.overlay');
-    const menuContainer = document.querySelector('.menu-container');
-    const mainElement = document.querySelector('main');
-    overlay.classList.toggle('hidden');
-
-    menuContainer.classList.contains('hidden')
-      ? (menuContainer.style.transform = 'translateX(0)')
-      : (menuContainer.style.transform = 'translateX(100%)');
-
-    menuContainer.classList.toggle('hidden');
-    mainElement.classList.toggle('blur');
-
-    this.#changeMenuIcon();
-    this.menuOpen =
-      this.menuOpen === false
-        ? (this.menuOpen = true)
-        : (this.menuOpen = false);
-    document.body.style.overflow = !document.body.style.overflow
-      ? (document.body.style.overflow = 'hidden')
-      : (document.body.style.overflow = '');
+    this.cartOpen
+      ? cartIcon.classList.add('cart-fill')
+      : cartIcon.classList.remove('cart-fill');
   }
 }
 

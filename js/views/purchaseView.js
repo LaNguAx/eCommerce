@@ -1,18 +1,33 @@
 import View from './View';
 class PurchaseView extends View {
+  errorMsg = 'Your cart is empty';
+
   addHandlerPurchaseBtnClicked(func) {
     window.addEventListener('click', function (e) {
       e.stopPropagation();
       const target = e.target.closest('[data-btn-name="purchase-btn"]');
       if (!target) return;
-      func();
+      const targetID = target?.closest('.product-container')?.dataset?.id;
+      if (target.closest('.purchase-now-container'))
+        return func(targetID, true);
+      if (target) return func(targetID);
     });
   }
 
-  renderCart(data) {
-    console.log(data);
-    if (!data.length) return 'No Items in your cart';
+  renderThankYouMsg() {
+    this.clear();
+    this.parentElement.insertAdjacentHTML(
+      'beforeend',
+      `            <div class="thank-you-container">
+    <p class="thank-you-text">
+      Thank you for your purchase!<br />Visit us again
+    </p>
+  </div>
+`
+    );
+  }
 
+  renderCart(data) {
     const markup = `${data
       .map(element => {
         return `        <li class="cart-item" data-id="${element.id}">
@@ -24,13 +39,17 @@ class PurchaseView extends View {
       </span>
 
       <div class="cart-image-container purchase-size">
-        <img src="${element.image}" alt="${element.description}" class="cart-image" />
+        <img src="${element.image}" alt="${
+          element.description
+        }" class="cart-image" />
       </div>
       <div class="cart-item-details flex-center">
         <p class="cart-item-name cart-name-size">${element.title}</p>
         <div class="cart-item-attributes fix-fz">
-          <p class="cart-item-price">$${element.price}</p>
-          <p class="cart-item-rating">${element.rating.rate}</p>
+          <p class="cart-item-price">$${Number(element.price).toFixed(2)}</p>
+          <p class="cart-item-rating">${'⭐'.repeat(
+            Math.round(element.rating.rate)
+          )}</p>
         </div>
       </div>
     </li>
@@ -50,15 +69,12 @@ class PurchaseView extends View {
       </ul>
     </div>
     <div class="purchase-details">
-      <p class="purchase-total-price">Total Price: $${data.reduce(
-        (acc, cur) => {
-          return (acc += cur.price);
-        },
-        0
-      )}</p>
+      <p class="purchase-total-price">Total Price: $${Number(
+        data.reduce((acc, cur) => (acc += cur.price), 0)
+      ).toFixed(2)}</p>
       <p class="purchase-total-items">Items: ${data.length}</p>
     </div>
-    <div class="continue-purchase-container">
+    <div class="continue-purchase-container purchase-now-container">
       <button class="btn purchase-btn fix-width" data-btn-name="purchase-btn">Purchase Now</button>
     </div>
     `;

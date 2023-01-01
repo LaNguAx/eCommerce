@@ -105,6 +105,7 @@ const productController = async function (productID) {
 
     productView.render(productData);
     window.location.hash = productData[0].id;
+    model.state.product = productData;
     productView.changeGridLayout(1);
 
     productView.setScrollTo('.product-container');
@@ -142,29 +143,46 @@ const addToCartController = async function (productID = undefined) {
 
 const deleteCartItemController = function (productID) {
   model.deleteCartItem(productID);
-  cartView.renderSpinner();
-  console.log('test');
-  if (!model.state.cart.length) {
-    cartView.clear();
-    //continue here, implementing the deletion of a cart item
-    purchaseView.render(model.state.cart);
-    return cartView.updateCartSubheading();
-  }
-  console.log('test');
   cartView.render(model.state.cart);
+  if (!model.state.cart.length) {
+    cartView.updateCartSubheading();
+    cartView.clear();
+  }
+  if (window.location.hash === '#purchase') {
+    purchaseView.render(model.state.cart);
+  }
 };
 
 const cartItemClickedController = async function (productID) {
-  mainNavigation.toggleCart();
-  return productController(productID);
+  if (mainNavigation.cartOpen) mainNavigation.toggleCart();
+  productController(productID);
+  cartView.setScrollTo('.products');
 };
 
-const purchaseController = function () {
+const purchaseController = async function (productID, renderThankYou = false) {
+  purchaseView.setScrollTo('.products');
+  if (renderThankYou) {
+    purchaseView.renderSpinner();
+    setTimeout(() => {
+      purchaseView.changeGridLayout(1);
+      purchaseView.renderHeader(
+        'Thank You!',
+        'Thank you for purchasing, come again!'
+      );
+      model.clearCart();
+      cartView.updateCartSubheading();
+      cartView.clear();
+      return purchaseView.renderThankYouMsg();
+    }, 1500);
+    return;
+  }
+
   window.location.hash = 'purchase';
   purchaseView.renderHeader('Purchase', 'Continue your purchasing journey');
   purchaseView.changeGridLayout(2);
   purchaseView.renderSpinner();
-
+  await addToCartController(productID);
+  if (mainNavigation.cartOpen) mainNavigation.toggleCart();
   purchaseView.render(model.state.cart);
 };
 
@@ -185,6 +203,7 @@ const initate = (async function () {
     cartView.addHandlerCartItemDeleted(deleteCartItemController);
     purchaseView.addHandlerPurchaseBtnClicked(purchaseController);
   } catch (error) {
-    console.log(error);
+    productView.changeGridLayout(1);
+    productsView.renderError(error);
   }
 })();

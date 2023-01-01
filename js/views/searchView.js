@@ -41,6 +41,7 @@ class SearchView extends View {
         const query = this.#getQuery();
         // if (!query || query.length < 3) return;
         if (!query) return;
+        console.log('test');
         func(query);
       }.bind(this)
     );

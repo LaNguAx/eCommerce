@@ -24,7 +24,6 @@ class mainNavigation extends View {
 
   #handleMenusClick() {
     window.addEventListener('click', e => {
-      e.stopPropagation();
       const target = e.target;
       if (e.target.closest('[data-btn-name="clear-cart-item"]')) return;
       if (e.target.closest('.cart-container')) return;

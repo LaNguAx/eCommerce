@@ -820,8 +820,9 @@ li {
   color: var(--category-heading-color);
   background-color: var(--main-heading-bg-color);
   color: #fff;
-  border-radius: 1rem;
   margin-inline: auto;
+  border-radius: 1rem;
+  margin-bottom: 5rem;
   font-size: 2.4rem;
 }
 

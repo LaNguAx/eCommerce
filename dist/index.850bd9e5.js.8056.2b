@@ -622,7 +622,6 @@ const productController = async function(productID) {
         ];
         (0, _productViewJsDefault.default).render(productData);
         window.location.hash = productData[0].id;
-        _modelJs.state.product = productData;
         (0, _productViewJsDefault.default).changeGridLayout(1);
         (0, _productViewJsDefault.default).setScrollTo(".product-container");
     } catch (error) {
@@ -651,32 +650,22 @@ const addToCartController = async function(productID) {
 };
 const deleteCartItemController = function(productID) {
     _modelJs.deleteCartItem(productID);
-    (0, _cartViewJsDefault.default).render(_modelJs.state.cart);
+    (0, _cartViewJsDefault.default).renderSpinner();
+    console.log("test");
     if (!_modelJs.state.cart.length) {
-        (0, _cartViewJsDefault.default).updateCartSubheading();
         (0, _cartViewJsDefault.default).clear();
+        //continue here, implementing the deletion of a cart item
+        (0, _purchaseViewJsDefault.default).render(_modelJs.state.cart);
+        return (0, _cartViewJsDefault.default).updateCartSubheading();
     }
-    if (window.location.hash === "#purchase") (0, _purchaseViewJsDefault.default).render(_modelJs.state.cart);
+    window.location.hash;
+    return (0, _purchaseViewJsDefault.default).render(_modelJs.state.cart);
 };
 const cartItemClickedController = async function(productID) {
     if ((0, _mainNavigationJsDefault.default).cartOpen) (0, _mainNavigationJsDefault.default).toggleCart();
     productController(productID);
-    (0, _cartViewJsDefault.default).setScrollTo(".products");
 };
-const purchaseController = async function(productID, renderThankYou = false) {
-    (0, _purchaseViewJsDefault.default).setScrollTo(".products");
-    if (renderThankYou) {
-        (0, _purchaseViewJsDefault.default).renderSpinner();
-        setTimeout(()=>{
-            (0, _purchaseViewJsDefault.default).changeGridLayout(1);
-            (0, _purchaseViewJsDefault.default).renderHeader("Thank You!", "Thank you for purchasing, come again!");
-            _modelJs.clearCart();
-            (0, _cartViewJsDefault.default).updateCartSubheading();
-            (0, _cartViewJsDefault.default).clear();
-            return (0, _purchaseViewJsDefault.default).renderThankYouMsg();
-        }, 1500);
-        return;
-    }
+const purchaseController = async function(productID) {
     window.location.hash = "purchase";
     (0, _purchaseViewJsDefault.default).renderHeader("Purchase", "Continue your purchasing journey");
     (0, _purchaseViewJsDefault.default).changeGridLayout(2);
@@ -701,8 +690,7 @@ const initate = async function() {
         (0, _cartViewJsDefault.default).addHandlerCartItemDeleted(deleteCartItemController);
         (0, _purchaseViewJsDefault.default).addHandlerPurchaseBtnClicked(purchaseController);
     } catch (error) {
-        (0, _productViewJsDefault.default).changeGridLayout(1);
-        (0, _productsViewJsDefault.default).renderError(error);
+        console.log(error);
     }
 }();
 
@@ -1962,14 +1950,12 @@ parcelHelpers.export(exports, "searchResults", ()=>searchResults);
 parcelHelpers.export(exports, "loadProduct", ()=>loadProduct);
 parcelHelpers.export(exports, "loadCart", ()=>loadCart);
 parcelHelpers.export(exports, "addToCart", ()=>addToCart);
-parcelHelpers.export(exports, "clearCart", ()=>clearCart);
 parcelHelpers.export(exports, "deleteCartItem", ()=>deleteCartItem);
 var _configJs = require("./config.js");
 var _helpersJs = require("./helpers.js");
 const AppData = {
     categories: [],
     categories_subheading: {
-        homepage: "View our most trending items!",
         electronics: "Innovative Electronics just for you!",
         jewelery: "Beautiful Jewelery just for you!",
         "men's clothing": "Manly clothes for a gentleman!",
@@ -2045,10 +2031,6 @@ const addToCart = function(product) {
     } catch (error) {
         throw error;
     }
-};
-const clearCart = function() {
-    localStorage.clear();
-    state.cart = [];
 };
 const deleteCartItem = function(productID) {
     const newCart = state.cart.filter((element)=>element.id !== Number(productID));
@@ -2330,6 +2312,7 @@ class mainNavigation extends (0, _viewDefault.default) {
     }
     #handleMenusClick() {
         window.addEventListener("click", (e)=>{
+            e.stopPropagation();
             const target = e.target;
             if (e.target.closest('[data-btn-name="clear-cart-item"]')) return;
             if (e.target.closest(".cart-container")) return;
@@ -2414,7 +2397,6 @@ class SearchView extends (0, _viewDefault.default) {
             const query = this.#getQuery();
             // if (!query || query.length < 3) return;
             if (!query) return;
-            console.log("test");
             func(query);
         }).bind(this));
     }
@@ -2445,15 +2427,16 @@ class CartView extends (0, _viewDefault.default) {
     }
     addHandlerCartItemClicked(func) {
         window.addEventListener("click", function(e) {
-            // e.preventDefault();
+            e.preventDefault();
             const target = e.target.closest(".cart-item");
             if (!target || e.target.closest('[data-btn-name="clear-cart-item"]')) return;
-            console.log("test");
+            console.log(target);
             func(target.dataset.id);
         });
     }
     addHandlerCartItemDeleted(func) {
         window.addEventListener("click", function(e) {
+            e.preventDefault();
             const target = e.target.closest('[data-btn-name="clear-cart-item"]');
             if (!target) return;
             const targetID = target.closest(".cart-item").dataset.id;
@@ -2521,20 +2504,11 @@ class PurchaseView extends (0, _viewDefault.default) {
             const target = e.target.closest('[data-btn-name="purchase-btn"]');
             if (!target) return;
             const targetID = target?.closest(".product-container")?.dataset?.id;
-            if (target.closest(".purchase-now-container")) return func(targetID, true);
-            if (target) return func(targetID);
+            func(targetID);
         });
     }
-    renderThankYouMsg() {
-        this.clear();
-        this.parentElement.insertAdjacentHTML("beforeend", `            <div class="thank-you-container">
-    <p class="thank-you-text">
-      Thank you for your purchase!<br />Visit us again
-    </p>
-  </div>
-`);
-    }
     renderCart(data) {
+        if (!data.length) return this.renderError(undefined, this.errorMsg, document.querySelector(".cart-list"));
         const markup = `${data.map((element)=>{
             return `        <li class="cart-item" data-id="${element.id}">
       <span
@@ -2550,7 +2524,7 @@ class PurchaseView extends (0, _viewDefault.default) {
       <div class="cart-item-details flex-center">
         <p class="cart-item-name cart-name-size">${element.title}</p>
         <div class="cart-item-attributes fix-fz">
-          <p class="cart-item-price">$${Number(element.price).toFixed(2)}</p>
+          <p class="cart-item-price">$${element.price}</p>
           <p class="cart-item-rating">${"⭐".repeat(Math.round(element.rating.rate))}</p>
         </div>
       </div>
@@ -2568,7 +2542,9 @@ class PurchaseView extends (0, _viewDefault.default) {
       </ul>
     </div>
     <div class="purchase-details">
-      <p class="purchase-total-price">Total Price: $${Number(data.reduce((acc, cur)=>acc += cur.price, 0)).toFixed(2)}</p>
+      <p class="purchase-total-price">Total Price: $${data.reduce((acc, cur)=>{
+            return acc += cur.price;
+        }, 0)}</p>
       <p class="purchase-total-items">Items: ${data.length}</p>
     </div>
     <div class="continue-purchase-container purchase-now-container">

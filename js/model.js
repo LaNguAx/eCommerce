@@ -5,6 +5,7 @@ import { AJAX } from './helpers.js';
 export const AppData = {
   categories: [],
   categories_subheading: {
+    homepage: 'View our most trending items!',
     electronics: 'Innovative Electronics just for you!',
     jewelery: 'Beautiful Jewelery just for you!',
     "men's clothing": 'Manly clothes for a gentleman!',
@@ -88,6 +89,11 @@ export const addToCart = function (product) {
   } catch (error) {
     throw error;
   }
+};
+
+export const clearCart = function () {
+  localStorage.clear();
+  state.cart = [];
 };
 
 export const deleteCartItem = function (productID) {

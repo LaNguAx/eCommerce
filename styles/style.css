@@ -892,6 +892,7 @@ li {
   background-color: var(--main-heading-bg-color);
   border-radius: 1rem;
   color: #fff;
+  margin-bottom: 5rem;
 }
 
 .fix-width {

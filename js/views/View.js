@@ -3,8 +3,8 @@ export default class View {
   #data;
 
   render(data, render = true, clear = true, element = this.parentElement) {
-    // if (!data || (Array.isArray(data) && data.length === 0))
-    //   return this.renderError();
+    if (!data || (Array.isArray(data) && data.length === 0))
+      return this.renderError();
     this.#data = data;
     if (clear) this.clear();
     const markup = this.generateMarkup(this.#data);
@@ -12,8 +12,8 @@ export default class View {
     element.insertAdjacentHTML('beforeend', markup);
   }
 
-  clear() {
-    this.parentElement.innerHTML = '';
+  clear(specifiecElement = this.parentElement) {
+    specifiecElement.innerHTML = '';
   }
   renderSpinner(specifiecElement = this.parentElement) {
     const markup = `
@@ -29,11 +29,15 @@ export default class View {
     mainHeading.innerHTML = heading;
     subHeading.innerHTML = subheading;
   }
-  renderError(errorCode = '', error = this.errorMsg) {
-    this.clear();
+  renderError(
+    errorCode = '',
+    error = this.errorMsg,
+    specifiecElement = this.parentElement
+  ) {
+    this.clear(specifiecElement);
     const markup = `<div class="error"><p>${error}<br> ${errorCode}</p>
   </div>`;
-    this.parentElement.insertAdjacentHTML('afterbegin', markup);
+    specifiecElement.insertAdjacentHTML('afterbegin', markup);
   }
   changeGridLayout(columns) {
     this.parentElement.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;

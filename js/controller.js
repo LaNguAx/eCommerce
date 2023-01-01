@@ -103,6 +103,7 @@ const productController = async function (productID) {
     const productData = [await model.loadProduct(productID)];
 
     productView.render(productData);
+    window.location.hash = productData[0].id;
 
     productView.changeGridLayout(1);
     productView.setScrollTo('.product-container');
@@ -111,9 +112,47 @@ const productController = async function (productID) {
   }
 };
 
-const cartController = function (productID) {
-  console.log('cart controller');
-  console.log(productID);
+const addToCartController = async function (productID = undefined) {
+  try {
+    if (!productID) {
+      if (model.state.cart.length > 0) {
+        cartView.updateCartSubheading('View the items in your cart');
+        return cartView.render(model.state.cart);
+      }
+      return cartView.updateCartSubheading();
+    }
+
+    const product = await model.loadProduct(productID);
+    const productExistsInCart = model.state.cart.find(
+      el => el.id === product.id
+    );
+    if (productExistsInCart) return;
+    cartView.renderSpinner();
+
+    model.addToCart(product);
+
+    cartView.render(model.state.cart);
+
+    cartView.updateCartSubheading('View the items in your cart');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const deleteCartItemController = function (productID) {
+  model.deleteCartItem(productID);
+  cartView.renderSpinner();
+  if (!model.state.cart.length) {
+    cartView.clear();
+    //continue here, implementing the deletion of a cart item
+    return cartView.updateCartSubheading();
+  }
+  cartView.render(model.state.cart);
+};
+
+const cartItemClickedController = async function (productID) {
+  mainNavigation.toggleCart();
+  productController(productID);
 };
 
 const initate = (async function () {
@@ -121,11 +160,16 @@ const initate = (async function () {
     window.location.hash = 'homepage';
     await productsController();
     await categoriesController();
+    model.loadCart();
+    await addToCartController();
+
     menuView.addHandlerMenuItemClicked(menuController);
     mainNavigation.addHandlerLogoClicked(productsController);
     searchView.addSearchHandler(searchController);
     productView.addHandlerProductClicked(productController);
-    cartView.addHandlerAddToCartClicked(cartController);
+    cartView.addHandlerAddToCartClicked(addToCartController);
+    cartView.addHandlerCartItemClicked(cartItemClickedController);
+    cartView.addHandlerCartItemDeleted(deleteCartItemController);
   } catch (error) {
     console.log(error);
   }

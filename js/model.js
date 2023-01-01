@@ -72,3 +72,28 @@ export const loadProduct = async function (productID) {
     throw error;
   }
 };
+
+const saveCart = function () {
+  localStorage.setItem('cart', JSON.stringify(state.cart));
+};
+export const loadCart = function () {
+  const storage = JSON.parse(localStorage.getItem('cart'));
+  if (!storage) return;
+  state.cart = storage;
+};
+export const addToCart = function (product) {
+  try {
+    state.cart.push(product);
+    saveCart();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteCartItem = function (productID) {
+  const newCart = state.cart.filter(
+    element => element.id !== Number(productID)
+  );
+  state.cart = newCart;
+  saveCart();
+};

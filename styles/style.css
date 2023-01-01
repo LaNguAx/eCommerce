@@ -389,6 +389,11 @@ body {
   padding: 1rem;
 }
 
+button,
+li {
+  cursor: pointer !important;
+}
+
 .interaction-buttons-container {
   /* position: absolute;
   bottom: 2.5%;
@@ -644,6 +649,7 @@ li {
   position: absolute;
   top: 0;
   left: 50%;
+  transform: translateX(-50%);
 
   margin: 60px auto;
   font-size: 10px;
@@ -835,4 +841,61 @@ li {
 
 .cart-list > .loader {
   left: 0;
+}
+
+/* PURCHASE PAGE */
+.purchase-container {
+  width: inherit;
+  margin-inline: auto;
+  margin-bottom: 5rem;
+  /* background-color: red; */
+}
+
+.purchase-cart-container {
+  /* width: inherit; */
+  border: 2px solid var(--category-heading-color);
+  margin-bottom: 2rem;
+}
+
+.purhase-cart-container > .cart-list {
+}
+
+.flex-center {
+  justify-content: center;
+  gap: 2rem;
+}
+
+.cart-name-size {
+  font-size: 2rem;
+}
+
+.fix-fz {
+  font-size: 1.8rem;
+}
+
+.purchase-details {
+  display: flex;
+  width: 90%;
+  margin-inline: auto;
+  justify-content: space-between;
+  font-size: 1.8rem;
+
+  margin-bottom: 2rem;
+}
+
+.thank-you-container {
+  width: 90%;
+  margin-inline: auto;
+  text-align: center;
+  font-size: 2.4rem;
+  color: var(--category-heading-color);
+  background-color: var(--main-heading-bg-color);
+  border-radius: 1rem;
+  color: #fff;
+}
+
+.fix-width {
+  width: auto;
+  padding: 1rem;
+  font-size: 2.8rem;
 }

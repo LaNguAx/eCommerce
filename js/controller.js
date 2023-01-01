@@ -9,6 +9,7 @@ import productsView from './views/productsView.js';
 import mainNavigation from './views/mainNavigation.js';
 import searchView from './views/searchView.js';
 import cartView from './views/cartView.js';
+import purchaseView from './views/purchaseView.js';
 const productsController = async function (category = undefined) {
   try {
     // simply beautiful code is written here, just amazing to see that I've created such thing. Basically this code, loads the products when the website is opened and then you can also use this to load specifiec products from categories :) It can also be used for the search component later
@@ -104,8 +105,8 @@ const productController = async function (productID) {
 
     productView.render(productData);
     window.location.hash = productData[0].id;
-
     productView.changeGridLayout(1);
+
     productView.setScrollTo('.product-container');
   } catch (error) {
     productView.renderError(error);
@@ -142,17 +143,29 @@ const addToCartController = async function (productID = undefined) {
 const deleteCartItemController = function (productID) {
   model.deleteCartItem(productID);
   cartView.renderSpinner();
+  console.log('test');
   if (!model.state.cart.length) {
     cartView.clear();
     //continue here, implementing the deletion of a cart item
+    purchaseView.render(model.state.cart);
     return cartView.updateCartSubheading();
   }
+  console.log('test');
   cartView.render(model.state.cart);
 };
 
 const cartItemClickedController = async function (productID) {
   mainNavigation.toggleCart();
-  productController(productID);
+  return productController(productID);
+};
+
+const purchaseController = function () {
+  window.location.hash = 'purchase';
+  purchaseView.renderHeader('Purchase', 'Continue your purchasing journey');
+  purchaseView.changeGridLayout(2);
+  purchaseView.renderSpinner();
+
+  purchaseView.render(model.state.cart);
 };
 
 const initate = (async function () {
@@ -170,6 +183,7 @@ const initate = (async function () {
     cartView.addHandlerAddToCartClicked(addToCartController);
     cartView.addHandlerCartItemClicked(cartItemClickedController);
     cartView.addHandlerCartItemDeleted(deleteCartItemController);
+    purchaseView.addHandlerPurchaseBtnClicked(purchaseController);
   } catch (error) {
     console.log(error);
   }

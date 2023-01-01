@@ -24,17 +24,18 @@ class CartView extends View {
   }
 
   addHandlerCartItemClicked(func) {
-    this.parentElement.addEventListener('click', function (e) {
+    window.addEventListener('click', function (e) {
       e.preventDefault();
       const target = e.target.closest('.cart-item');
       if (!target || e.target.closest('[data-btn-name="clear-cart-item"]'))
         return;
+      console.log(target);
       func(target.dataset.id);
     });
   }
 
   addHandlerCartItemDeleted(func) {
-    this.parentElement.addEventListener('click', function (e) {
+    window.addEventListener('click', function (e) {
       e.preventDefault();
       const target = e.target.closest('[data-btn-name="clear-cart-item"]');
       if (!target) return;

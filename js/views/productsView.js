@@ -13,7 +13,7 @@ class ProductsView extends View {
         <span class="product-price">${product.price}$</span>
       </div>
       <div class="interaction-buttons-container">
-        <button class="btn purchase-btn">purchase</button>
+        <button class="btn purchase-btn" data-btn-name="purchase-btn">purchase</button>
         <button
           class="btn add-to-cart-btn material-symbols-outlined interaction-icon" data-id=${product.id}
         >

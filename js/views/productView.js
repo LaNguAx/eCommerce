@@ -36,7 +36,7 @@ class ProductView extends View {
         ">${product.price}$</span>
       </div>
       <div class="interaction-buttons-container" style="width: 70%; height:auto;">
-        <button class="btn purchase-btn" style="font-size: 3rem; padding:1rem;">purchase</button>
+        <button class="btn purchase-btn" data-btn-name="purchase-btn" style="font-size: 3rem; padding:1rem;">purchase</button>
         <button
           class="btn add-to-cart-btn material-symbols-outlined interaction-icon" style="font-size: 3.4rem;"
         >

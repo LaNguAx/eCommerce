@@ -2,14 +2,14 @@ export default class View {
   parentElement = document.querySelector('.products');
   #data;
 
-  render(data, render = true, clear = true) {
-    if (!data || (Array.isArray(data) && data.length === 0))
-      return this.renderError();
+  render(data, render = true, clear = true, element = this.parentElement) {
+    // if (!data || (Array.isArray(data) && data.length === 0))
+    //   return this.renderError();
     this.#data = data;
     if (clear) this.clear();
     const markup = this.generateMarkup(this.#data);
     if (!render) return;
-    this.parentElement.insertAdjacentHTML('beforeend', markup);
+    element.insertAdjacentHTML('beforeend', markup);
   }
 
   clear() {

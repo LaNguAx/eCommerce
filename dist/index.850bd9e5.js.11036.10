@@ -554,8 +554,6 @@ var _searchViewJs = require("./views/searchView.js");
 var _searchViewJsDefault = parcelHelpers.interopDefault(_searchViewJs);
 var _cartViewJs = require("./views/cartView.js");
 var _cartViewJsDefault = parcelHelpers.interopDefault(_cartViewJs);
-var _purchaseViewJs = require("./views/purchaseView.js");
-var _purchaseViewJsDefault = parcelHelpers.interopDefault(_purchaseViewJs);
 const productsController = async function(category) {
     try {
         // simply beautiful code is written here, just amazing to see that I've created such thing. Basically this code, loads the products when the website is opened and then you can also use this to load specifiec products from categories :) It can also be used for the search component later
@@ -651,48 +649,37 @@ const addToCartController = async function(productID) {
 const deleteCartItemController = function(productID) {
     _modelJs.deleteCartItem(productID);
     (0, _cartViewJsDefault.default).renderSpinner();
-    console.log("test");
     if (!_modelJs.state.cart.length) {
         (0, _cartViewJsDefault.default).clear();
         //continue here, implementing the deletion of a cart item
-        (0, _purchaseViewJsDefault.default).render(_modelJs.state.cart);
         return (0, _cartViewJsDefault.default).updateCartSubheading();
     }
-    console.log("test");
     (0, _cartViewJsDefault.default).render(_modelJs.state.cart);
 };
 const cartItemClickedController = async function(productID) {
     (0, _mainNavigationJsDefault.default).toggleCart();
-    return productController(productID);
-};
-const purchaseController = function() {
-    window.location.hash = "purchase";
-    (0, _purchaseViewJsDefault.default).renderHeader("Purchase", "Continue your purchasing journey");
-    (0, _purchaseViewJsDefault.default).changeGridLayout(2);
-    (0, _purchaseViewJsDefault.default).renderSpinner();
-    (0, _purchaseViewJsDefault.default).render(_modelJs.state.cart);
+    productController(productID);
 };
 const initate = async function() {
     try {
         window.location.hash = "homepage";
-        await productsController();
-        await categoriesController();
-        _modelJs.loadCart();
-        await addToCartController();
-        (0, _menuViewJsDefault.default).addHandlerMenuItemClicked(menuController);
-        (0, _mainNavigationJsDefault.default).addHandlerLogoClicked(productsController);
-        (0, _searchViewJsDefault.default).addSearchHandler(searchController);
-        (0, _productViewJsDefault.default).addHandlerProductClicked(productController);
-        (0, _cartViewJsDefault.default).addHandlerAddToCartClicked(addToCartController);
-        (0, _cartViewJsDefault.default).addHandlerCartItemClicked(cartItemClickedController);
-        (0, _cartViewJsDefault.default).addHandlerCartItemDeleted(deleteCartItemController);
-        (0, _purchaseViewJsDefault.default).addHandlerPurchaseBtnClicked(purchaseController);
+    // await productsController();
+    // await categoriesController();
+    // model.loadCart();
+    // await addToCartController();
+    // menuView.addHandlerMenuItemClicked(menuController);
+    // mainNavigation.addHandlerLogoClicked(productsController);
+    // searchView.addSearchHandler(searchController);
+    // productView.addHandlerProductClicked(productController);
+    // cartView.addHandlerAddToCartClicked(addToCartController);
+    // cartView.addHandlerCartItemClicked(cartItemClickedController);
+    // cartView.addHandlerCartItemDeleted(deleteCartItemController);
     } catch (error) {
         console.log(error);
     }
 }();
 
-},{"core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model.js":"Py0LO","./views/View.js":"iS7pi","./views/headerView.js":"79wXI","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./views/productView.js":"iCNdF","./views/productsView.js":"c9r03","./views/mainNavigation.js":"b02rz","./views/searchView.js":"jYSxB","./views/cartView.js":"lAdwg","./views/purchaseView.js":"ftqoR","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gSXXb":[function(require,module,exports) {
+},{"core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model.js":"Py0LO","./views/View.js":"iS7pi","./views/headerView.js":"79wXI","./views/menuView.js":"i6XNo","./views/favoritesView.js":"eUTdN","./views/productView.js":"iCNdF","./views/productsView.js":"c9r03","./views/mainNavigation.js":"b02rz","./views/searchView.js":"jYSxB","./views/cartView.js":"lAdwg","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gSXXb":[function(require,module,exports) {
 var global = require("962cc8592522751");
 var DESCRIPTORS = require("c5322ba2b93eecd");
 var defineBuiltInAccessor = require("89278e8349d44987");
@@ -2116,14 +2103,13 @@ parcelHelpers.defineInteropFlag(exports);
 class View {
     parentElement = document.querySelector(".products");
     #data;
-    render(data, render = true, clear = true, element = this.parentElement) {
-        // if (!data || (Array.isArray(data) && data.length === 0))
-        //   return this.renderError();
+    render(data, render = true, clear = true) {
+        if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
         this.#data = data;
         if (clear) this.clear();
         const markup = this.generateMarkup(this.#data);
         if (!render) return;
-        element.insertAdjacentHTML("beforeend", markup);
+        this.parentElement.insertAdjacentHTML("beforeend", markup);
     }
     clear() {
         this.parentElement.innerHTML = "";
@@ -2239,7 +2225,7 @@ class ProductView extends (0, _viewDefault.default) {
         ">${product.price}$</span>
       </div>
       <div class="interaction-buttons-container" style="width: 70%; height:auto;">
-        <button class="btn purchase-btn" data-btn-name="purchase-btn" style="font-size: 3rem; padding:1rem;">purchase</button>
+        <button class="btn purchase-btn" style="font-size: 3rem; padding:1rem;">purchase</button>
         <button
           class="btn add-to-cart-btn material-symbols-outlined interaction-icon" style="font-size: 3.4rem;"
         >
@@ -2271,7 +2257,7 @@ class ProductsView extends (0, _viewDefault.default) {
         <span class="product-price">${product.price}$</span>
       </div>
       <div class="interaction-buttons-container">
-        <button class="btn purchase-btn" data-btn-name="purchase-btn">purchase</button>
+        <button class="btn purchase-btn">purchase</button>
         <button
           class="btn add-to-cart-btn material-symbols-outlined interaction-icon" data-id=${product.id}
         >
@@ -2425,16 +2411,15 @@ class CartView extends (0, _viewDefault.default) {
         }).bind(this));
     }
     addHandlerCartItemClicked(func) {
-        window.addEventListener("click", function(e) {
+        this.parentElement.addEventListener("click", function(e) {
             e.preventDefault();
             const target = e.target.closest(".cart-item");
             if (!target || e.target.closest('[data-btn-name="clear-cart-item"]')) return;
-            console.log(target);
             func(target.dataset.id);
         });
     }
     addHandlerCartItemDeleted(func) {
-        window.addEventListener("click", function(e) {
+        this.parentElement.addEventListener("click", function(e) {
             e.preventDefault();
             const target = e.target.closest('[data-btn-name="clear-cart-item"]');
             if (!target) return;
@@ -2489,70 +2474,6 @@ class CartView extends (0, _viewDefault.default) {
     }
 }
 exports.default = new CartView();
-
-},{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"ftqoR":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-var _view = require("./View");
-var _viewDefault = parcelHelpers.interopDefault(_view);
-class PurchaseView extends (0, _viewDefault.default) {
-    addHandlerPurchaseBtnClicked(func) {
-        window.addEventListener("click", function(e) {
-            e.stopPropagation();
-            const target = e.target.closest('[data-btn-name="purchase-btn"]');
-            if (!target) return;
-            func();
-        });
-    }
-    renderCart(data) {
-        console.log(data);
-        if (!data.length) return "No Items in your cart";
-        const markup = `${data.map((element)=>{
-            return `        <li class="cart-item" data-id="${element.id}">
-      <span
-        class="material-symbols-outlined cart-clear-item"
-        data-btn-name="clear-cart-item"
-      >
-        cancel
-      </span>
-
-      <div class="cart-image-container purchase-size">
-        <img src="${element.image}" alt="${element.description}" class="cart-image" />
-      </div>
-      <div class="cart-item-details flex-center">
-        <p class="cart-item-name cart-name-size">${element.title}</p>
-        <div class="cart-item-attributes fix-fz">
-          <p class="cart-item-price">$${element.price}</p>
-          <p class="cart-item-rating">${element.rating.rate}</p>
-        </div>
-      </div>
-    </li>
-`;
-        }).join("")}`;
-        return markup;
-    }
-    generateMarkup(data) {
-        const markup = `
-    <div class="purchase-container">
-    <div class="purchase-cart-container">
-      <ul class="cart-list">${this.renderCart(data)}
-        <div class="divider"></div>
-      </ul>
-    </div>
-    <div class="purchase-details">
-      <p class="purchase-total-price">Total Price: $${data.reduce((acc, cur)=>{
-            return acc += cur.price;
-        }, 0)}</p>
-      <p class="purchase-total-items">Items: ${data.length}</p>
-    </div>
-    <div class="continue-purchase-container">
-      <button class="btn purchase-btn fix-width" data-btn-name="purchase-btn">Purchase Now</button>
-    </div>
-    `;
-        return markup;
-    }
-}
-exports.default = new PurchaseView();
 
 },{"./View":"iS7pi","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["bxIRe","1GgH0"], "1GgH0", "parcelRequire512a")
 
